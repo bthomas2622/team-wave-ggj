@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -14,7 +15,8 @@ public class Map {
 
 	static final int WIDTH = 5;
 	static final int HEIGHT = 3;
-
+	static final int MOB_NUMBERS = 20;
+	
 	gameScreen game;
 
 	World world;
@@ -43,6 +45,12 @@ public class Map {
 		Mob startingPlayer = new Mob(game, createBody(960, 540,Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[2][1]);
 		game.mobs.add(startingPlayer);
 
+		for (int x = 0; x < MOB_NUMBERS; x++) {
+			int startingX = MathUtils.random(WIDTH);
+			int startingY = MathUtils.random(HEIGHT);
+			
+//			Mob newMob = new Mob(game, createBody(), nodes[]);
+		}
 	}
 	
 	public void generateNodes() {
