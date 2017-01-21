@@ -7,32 +7,24 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Array;
 
 public class Mob implements Collideable {
 
-    gameScreen game;
-    public static Texture mobImage;
-    WaveObject wave;
-
-
+	static final int BODY_WIDTH = 50;
+	static final int BODY_HEIGHT = 80;
+	// Variable that determines how close a mob needs to get to its target to be considered "at" it
+	private static final float TARGET_COLLISION_TOLERANCE = 1;
+	// Amount moved by the mob per tick (in pixels)
+	private static final float MOVE_SPEED = 2;
+	public static Texture mobImage;
+	gameScreen game;
+	WaveObject wave;
     Sprite mobSprite;
     float MobDice;
-	
-	// Variable that determines how close a mob needs to get to its target to be considered "at" it
-	private static final float TARGET_COLLISION_TOLERANCE  = 1;
-
 	boolean controlled;		// Has been waved at
 	boolean waved;			// Has performed a wave
-
-    static final int BODY_WIDTH = 50;
-    static final int BODY_HEIGHT = 80;
-
     Node target;            // Node with the position the mob wants to move to
     Body body;                // Mob body
-
-    // Amount moved by the mob per tick (in pixels)
-    private static final float MOVE_SPEED = 2;
 
     public Mob(gameScreen game, Body body, Node target) {
         this.game = game;
@@ -85,8 +77,8 @@ public class Mob implements Collideable {
      * 2. TTL = Time to live. The projectile will expire after 's' seconds
      */
     public void wave() {
-        wave = new WaveObject();
-        wave.positionDrops(mobSprite.getX() + 25, mobSprite.getY() + 40);
+		wave = new WaveObject(game);
+		wave.positionDrops(mobSprite.getX() + 25, mobSprite.getY() + 40);
 		waved = true;
     }
 

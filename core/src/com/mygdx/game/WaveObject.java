@@ -4,14 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 
-import static java.lang.Math.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 
 public class WaveObject implements Collideable {
 	Array<Sprite> dropSprites = new Array<Sprite>(20);
-	Texture wave_drop = new Texture(Gdx.files.internal("blue_drop.png"));
+	Texture wave_drop = new Texture(Gdx.files.internal("waveProjectile.png"));
+	gameScreen gameScreen;
+
+	public WaveObject(gameScreen gs) {
+		gameScreen = gs;
+	}
 
 
 	@Override
@@ -33,6 +40,8 @@ public class WaveObject implements Collideable {
 			y = centerY + r * sin(i);
 			dropSprite.setPosition(((float) x), (float) y);
 			dropSprites.add(dropSprite);
+			Body body = gameScreen.map.createBody(((int) x) + 8, (int) y + 8, 16, 16);
+			body.setUserData(this);
 		}
 	}
 
