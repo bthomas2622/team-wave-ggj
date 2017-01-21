@@ -11,6 +11,7 @@ public class Mob {
 	
 	gameScreen game;
 	Texture mobImage;
+	Texture wave_drop = new Texture(Gdx.files.internal("blue_drop.png"));
     Sprite mobSprite;
     float MobDice;
 	
@@ -39,6 +40,7 @@ public class Mob {
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
 
+
 	}
 	
 	public void tick() {
@@ -48,8 +50,18 @@ public class Mob {
 	public void render(Batch batch) {
         batch.draw(mobSprite, mobSprite.getX(), mobSprite.getY(), mobSprite.getOriginX(), mobSprite.getOriginY(), mobSprite.getWidth(), mobSprite.getHeight(), mobSprite.getScaleX(), mobSprite.getScaleY(), mobSprite.getRotation());
 	}
-	
+
+	/**
+	 * Code to generate wave
+	 * Place the projectiles around the person object in a circular fashion
+	 * Each projectile will be a 2x2 blue rectangle travelling for some 'd' distance
+	 * Number of projectiles = 360/18 = 20
+	 * Need to calculate each projectiles center location (x/y) around the particular person object
+	 * To be decided: 1. Velocity of the projectile
+	 * 2. TTL = Time to live. The projectile will expire after 's' seconds
+	 */
 	public void wave() {
+
 		
 	}
 	
@@ -64,5 +76,4 @@ public class Mob {
 	public void dispose(){
 		mobImage.dispose();
 	}
-	
 }

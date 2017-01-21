@@ -30,8 +30,9 @@ public class Map {
 
 	public void generate() {
 		
-		Mob startingPlayer = new Mob(game, createBody(960, 540), nodes[2][1]);
+		Mob startingPlayer = new Mob(game, createBody(960, 540,Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[2][1]);
 		game.mobs.add(startingPlayer);
+
 	}
 	
 	public void generateNodes() {
@@ -43,7 +44,7 @@ public class Map {
 		}
 	}
 
-	public Body createBody(int x, int y) {
+	public Body createBody(int x, int y, int width, int height) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 
@@ -53,7 +54,7 @@ public class Map {
 
 		PolygonShape shape = new PolygonShape();
 
-		shape.setAsBox(Mob.BODY_WIDTH, Mob.BODY_HEIGHT);
+		shape.setAsBox(width, height);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;

@@ -22,8 +22,15 @@ public class gameScreen implements Screen {
         backgroundImage = new Texture(Gdx.files.internal("grid.png"));
         map = new Map(this);
         mobs = new Array<Mob>();
-        
+
         map.generate();
+    }
+
+    //@Override
+    public void create() {
+        /*
+        The code to override the ApplicationAdapter goes here
+         */
     }
 
     @Override
