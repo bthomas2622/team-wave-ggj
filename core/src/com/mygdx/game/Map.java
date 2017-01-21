@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -17,21 +20,29 @@ public class Map {
 	World world;
 	
 	Node[][] nodes;
+	
+    Texture backgroundImage;
 
 	public Map(gameScreen game) {
 		this.game = game;
 		world = new World(new Vector2(0, 0), false);
 		nodes = new Node[WIDTH][HEIGHT];
+        backgroundImage = new Texture(Gdx.files.internal("grid.png"));
 	}
 	
-	public void render() {
+	public void tick() {
 		
+	}
+	
+	public void render(Batch batch) {
+        batch.draw(backgroundImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	public void generate() {
 		
-		Mob startingPlayer = new Mob(game, createBody(960, 540), nodes[2][1]);
+		Mob startingPlayer = new Mob(game, createBody(960, 540,Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[2][1]);
 		game.mobs.add(startingPlayer);
+
 	}
 	
 	public void generateNodes() {
@@ -43,7 +54,7 @@ public class Map {
 		}
 	}
 
-	public Body createBody(int x, int y) {
+	public Body createBody(int x, int y, int width, int height) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 
@@ -53,7 +64,7 @@ public class Map {
 
 		PolygonShape shape = new PolygonShape();
 
-		shape.setAsBox(Mob.BODY_WIDTH, Mob.BODY_HEIGHT);
+		shape.setAsBox(width, height);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
