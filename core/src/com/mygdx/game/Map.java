@@ -39,7 +39,7 @@ public class Map {
 	}
 
 	public void generate() {
-		
+		generateNodes();
 		Mob startingPlayer = new Mob(game, createBody(960, 540,Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[2][1]);
 		game.mobs.add(startingPlayer);
 

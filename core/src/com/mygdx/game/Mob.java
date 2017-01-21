@@ -91,7 +91,7 @@ public class Mob implements Collideable {
 		// the mob and its target node. This does come with the advantage that it allows for
 		// diagonal movement paths
 
-		float dX = MOVE_SPEED * (float) Math.cos(target.getxPos() / getXPos());
+		float dX = MOVE_SPEED * (float) Math.cos(target.getXPos() / getXPos());
 		float dY = MOVE_SPEED * (float) Math.sin(target.getYPos() / getYPos());
 
 		setPos(getXPos() + dX, getYPos() + dY);

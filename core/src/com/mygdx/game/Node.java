@@ -14,7 +14,7 @@ public class Node
 	}
 
 	// Methods that allow some math between Nodes
-	public int getxPos() {
+	public int getXPos() {
 		return xPos;
 	}
 
