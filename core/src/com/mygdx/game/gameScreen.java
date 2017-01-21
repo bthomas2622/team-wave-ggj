@@ -32,6 +32,9 @@ public class gameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
         game.batch.draw(backgroundImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        for (Mob mob:mobs){
+            mob.render(game.batch);
+        }
         game.batch.end();
     }
 
