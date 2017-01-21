@@ -11,7 +11,7 @@ public class Mob implements Collideable {
 	
 	gameScreen game;
 	public static Texture mobImage;
-	public static Texture wave_drop = new Texture(Gdx.files.internal("blue_drop.png"));
+	public static Texture wave_drop = new Texture(Gdx.files.internal("waveProjectilepng"));
 
     Sprite mobSprite,dropSprite;
     float MobDice;
