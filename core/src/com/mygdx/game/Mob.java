@@ -22,7 +22,10 @@ public class Mob {
 	
 	Node target;			// Node with the position the mob wants to move to
 	Body body;				// Mob body
-	
+
+	// Amount moved by the mob per tick (in pixels)
+	private static final double MOVE_SPEED = 2;
+
 	public Mob(gameScreen game, Body body, Node target) {
 		this.game = game;
 		this.body = body;
@@ -40,11 +43,19 @@ public class Mob {
         mobSprite.setRotation(0f);
 
 	}
-	
+
+	// Method that gets called whenever the game is "updating"
 	public void tick() {
-		
+
+		move();
+
 	}
-	
+
+	// Moves the Mob one "MOVE_SPEED" closer to its target node
+	private void move() {
+
+	}
+
 	public void render(Batch batch) {
         batch.draw(mobSprite, mobSprite.getX(), mobSprite.getY(), mobSprite.getOriginX(), mobSprite.getOriginY(), mobSprite.getWidth(), mobSprite.getHeight(), mobSprite.getScaleX(), mobSprite.getScaleY(), mobSprite.getRotation());
 	}
@@ -53,10 +64,19 @@ public class Mob {
 		
 	}
 	
-	public void getTarget() {
-		
+	public Node getTarget() {
+		return target;
 	}
-	
+
+	public void setTarget(Node newTarget) {
+		target = newTarget;
+	}
+
+	// returns true when the mob is at the target node
+	private boolean atTarget() {
+		return (body.getPosition().x == target.xPos); // Update with collision code
+	}
+
 	public void moveTowardTarget() {
 		
 	}
@@ -64,5 +84,5 @@ public class Mob {
 	public void dispose(){
 		mobImage.dispose();
 	}
-	
+
 }
