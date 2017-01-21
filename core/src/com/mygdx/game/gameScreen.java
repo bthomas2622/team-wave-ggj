@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -15,6 +17,8 @@ public class gameScreen implements Screen {
     
     Map map;
     Array<Mob> mobs;
+    Box2DDebugRenderer debugRenderer;
+    Matrix4 debugMatrix;
 
     public gameScreen(final TeamWave gam) {
         game = gam;
@@ -22,6 +26,7 @@ public class gameScreen implements Screen {
         mobs = new Array<Mob>();
 
         map.generate();
+        debugRenderer = new Box2DDebugRenderer();
     }
 
     //@Override
@@ -47,7 +52,9 @@ public class gameScreen implements Screen {
         for (Mob mob:mobs) {
             mob.render(game.batch);
         }
+        debugMatrix = game.batch.getProjectionMatrix().cpy();
         game.batch.end();
+        debugRenderer.render(map.world, debugMatrix);
     }
 
     @Override
@@ -72,6 +79,7 @@ public class gameScreen implements Screen {
 
     @Override
     public void dispose() {
+        debugRenderer.dispose();
     }
 
 }
