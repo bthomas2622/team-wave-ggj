@@ -47,6 +47,7 @@ public class Mob implements Collideable {
         System.out.println(mobSprite.getX());
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
+        wave();
         body.setUserData(this);
     }
 
@@ -165,6 +166,6 @@ public class Mob implements Collideable {
 	public void onCollide(Collideable object) {
 		if (object instanceof WaveObject) {
 			controlled = true;
-		}	
+		}
 	}
 }
