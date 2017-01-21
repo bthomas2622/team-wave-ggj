@@ -11,7 +11,7 @@ import static java.lang.Math.*;
 
 public class WaveObject implements Collideable {
 	Array<Sprite> dropSprites = new Array<Sprite>(20);
-	Texture wave_drop = new Texture(Gdx.files.internal("blue_drop.png"));
+	Texture wave_drop = new Texture(Gdx.files.internal("waveProjectile.png"));
 
 
 	@Override
