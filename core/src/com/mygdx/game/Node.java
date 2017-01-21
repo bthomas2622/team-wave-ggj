@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import java.util.ArrayList;
 
 public class Node
@@ -60,7 +62,7 @@ public class Node
 
 	public Node getRandomNeighborNode(){
 		ArrayList<Node> neighborNodes = getNeighborNodes();
-		return neighborNodes.get((int)(Math.random() * neighborNodes.size()));
+		return neighborNodes.get(MathUtils.random(0, neighborNodes.size() - 1));
 	}
 
 }

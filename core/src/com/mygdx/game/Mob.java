@@ -20,6 +20,9 @@ public class Mob implements Collideable {
 	static final int BODY_WIDTH = 50;
 	static final int BODY_HEIGHT = 80;
 
+	// Variable that determines how close a mob needs to get to its target to be considered "at" it
+	private static final float TARGET_COLLISION_TOLERANCE  = 1;
+
 	boolean controlled;		// Has been waved at
 	boolean waved;			// Has performed a wave
 
@@ -99,12 +102,12 @@ public class Mob implements Collideable {
 		// Note, we have to adjust the xPos because it is not a pixel position
 		float dX = Math.abs(this.getXPixelPos() - target.getXPixelPos());
 		float dY = Math.abs(this.getYPixelPos() - target.getYPixelPos());
-		System.out.println("Mob x: " + this.getXPixelPos() + " target X: " + target.getXPixelPos());
-		System.out.println("Mob y: " + this.getYPixelPos() + " target y: " + target.getYPixelPos());
+		//System.out.println("Mob x: " + this.getXPixelPos() + " target X: " + target.getXPixelPos());
+		//System.out.println("Mob y: " + this.getYPixelPos() + " target y: " + target.getYPixelPos());
 
-		System.out.println("DX: " + dX + ", DY " + dY);
-		System.out.println("atTarget: " + (dX <= 96 && dY <= 96));
-		return (dX <= 96 && dY <= 96);
+		//System.out.println("DX: " + dX + ", DY " + dY);
+		//System.out.println("atTarget: " + (dX <= 96 && dY <= 96));
+		return (dX <= TARGET_COLLISION_TOLERANCE && dY <= TARGET_COLLISION_TOLERANCE);
 	}
 
 	// Moves the target one "MOVE_SPEED" towards the target Node
@@ -113,19 +116,29 @@ public class Mob implements Collideable {
 		// the mob and its target node. This does come with the advantage that it allows for
 		// diagonal movement paths
 
+		// I'm leaving the debug printlns in in case we ever decide to hone in on the issue
 
 		if (atTarget()) {
-			setTarget(target.getRandomNeighborNode());
+			Node newTarget = target.getRandomNeighborNode();
+			//System.out.println("Switching the target from (" + target.getYPos() +", " + target.getXPos() +") to (" + newTarget.getXPos() + ", " + newTarget.getYPos() + ").");
+			setTarget(newTarget);
 		}
 
 		float deltaX = target.getXPixelPos() - this.getXPixelPos();
 		float deltaY = target.getYPixelPos() - this.getYPixelPos();
 
-		float theta = (float)Math.tan(deltaY / deltaX);
+		float theta = (float)Math.atan(deltaY / deltaX);
 
-		float Vx =  (float) Math.cos(theta) * MOVE_SPEED;
+		float Vx = (float) Math.cos(theta) * MOVE_SPEED;
 		float Vy = (float) Math.sin(theta) * MOVE_SPEED;
 
+		// Super hacky method of making sure that our mobs don't run off the screen
+		if ((deltaX > 0 && Vx < 0) || (deltaX < 0 && Vx > 0))
+			Vx = -Vx;
+		if ((deltaY > 0 && Vy < 0) || (deltaY < 0 && Vy > 0))
+			Vy = -Vy;
+
+		//System.out.println("Vx: " + Vx + ", Vy: " + Vy +", Theta: " + theta +", target X: " + target.getXPos() + ", target Y: " + target.getYPos());
 		this.body.setLinearVelocity(Vx, Vy);
 	}
 
