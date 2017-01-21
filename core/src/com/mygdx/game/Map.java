@@ -76,4 +76,8 @@ public class Map {
 
 		return body;
 	}
+
+	public Node[][] getNodes(){
+		return nodes;
+	}
 }

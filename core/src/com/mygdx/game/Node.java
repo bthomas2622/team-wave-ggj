@@ -2,10 +2,11 @@ package com.mygdx.game;
 
 public class Node
 {
-	public int xPos, yPos;
+	private int xPos, yPos;
 
 	// Flagged true for end nodes, so that "exiting" people know to be removed when they reach it
 	private boolean endNode;
+
 
 	public Node(int xPos, int yPos) {
 		this.xPos = xPos;
@@ -23,6 +24,10 @@ public class Node
 
 	public void setNeighborNodes(Node left, Node right, Node above, Node below) {
 
+	}
+
+	public Node[] getNeighborNodes() {
+		return null;
 	}
 
 }

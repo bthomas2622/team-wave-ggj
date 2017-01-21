@@ -10,22 +10,23 @@ import com.badlogic.gdx.physics.box2d.Body;
 public class Mob {
 	
 	gameScreen game;
-	Texture mobImage;
-	Texture wave_drop = new Texture(Gdx.files.internal("blue_drop.png"));
+	public static Texture mobImage;
+	public static Texture wave_drop = new Texture(Gdx.files.internal("blue_drop.png"));
+
     Sprite mobSprite;
     float MobDice;
-	
+
 	static final int BODY_WIDTH = 80;
 	static final int BODY_HEIGHT = 50;
-	
+
 	boolean controlled;		// Has been waved at
 	boolean waved;			// Has performed a wave
-	
+
 	Node target;			// Node with the position the mob wants to move to
 	Body body;				// Mob body
 
 	// Amount moved by the mob per tick (in pixels)
-	private static final double MOVE_SPEED = 2;
+	private static final float MOVE_SPEED = 2;
 
 	public Mob(gameScreen game, Body body, Node target) {
 		this.game = game;
@@ -49,12 +50,7 @@ public class Mob {
 	// Method that gets called whenever the game is "updating"
 	public void tick() {
 
-		move();
-
-	}
-
-	// Moves the Mob one "MOVE_SPEED" closer to its target node
-	private void move() {
+		moveTowardTarget();
 
 	}
 
@@ -73,9 +69,9 @@ public class Mob {
 	 */
 	public void wave() {
 
-		
+
 	}
-	
+
 	public Node getTarget() {
 		return target;
 	}
@@ -86,11 +82,32 @@ public class Mob {
 
 	// returns true when the mob is at the target node
 	private boolean atTarget() {
-		return (body.getPosition().x == target.xPos); // Update with collision code
+		return (body.getPosition().x == target.getYPos()) && (body.getPosition().y == target.getYPos()); // Update with collision code
 	}
 
+	// Moves the target one "MOVE_SPEED" towards the target Node
 	public void moveTowardTarget() {
-		
+		// Note: this code is based on the assumption that there is a straight line between
+		// the mob and its target node. This does come with the advantage that it allows for
+		// diagonal movement paths
+
+		float dX = MOVE_SPEED * (float) Math.cos(target.getxPos() / getXPos());
+		float dY = MOVE_SPEED * (float) Math.sin(target.getYPos() / getYPos());
+
+		setPos(getXPos() + dX, getYPos() + dY);
+	}
+
+	// Moving the position access calls into a helper to increase code readability
+	public float getXPos() {
+		return body.getPosition().x;
+	}
+
+	public float getYPos() {
+		return body.getPosition().y;
+	}
+
+	public void setPos(float newXPos, float newYPos) {
+		body.getPosition().set(newXPos, newYPos);
 	}
 
 	public void dispose(){
@@ -98,7 +115,6 @@ public class Mob {
 	}
 
 	public void onCollide(Object entity) {
-		
-	}
 
+	}
 }
