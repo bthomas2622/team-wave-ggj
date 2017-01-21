@@ -12,14 +12,12 @@ import com.badlogic.gdx.utils.Array;
 
 public class gameScreen implements Screen {
     final TeamWave game;
-    Texture backgroundImage;
     
     Map map;
     Array<Mob> mobs;
 
     public gameScreen(final TeamWave gam) {
         game = gam;
-        backgroundImage = new Texture(Gdx.files.internal("grid.png"));
         map = new Map(this);
         mobs = new Array<Mob>();
 
@@ -35,11 +33,18 @@ public class gameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+    	map.world.step(delta, 6, 2);
+    	
+    	map.tick();
+    	for (Mob mob:mobs) {
+    		mob.tick();
+    	}
+    	
         Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
-        game.batch.draw(backgroundImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        for (Mob mob:mobs){
+        map.render(game.batch);
+        for (Mob mob:mobs) {
             mob.render(game.batch);
         }
         game.batch.end();

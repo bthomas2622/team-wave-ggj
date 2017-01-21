@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -17,15 +20,22 @@ public class Map {
 	World world;
 	
 	Node[][] nodes;
+	
+    Texture backgroundImage;
 
 	public Map(gameScreen game) {
 		this.game = game;
 		world = new World(new Vector2(0, 0), false);
 		nodes = new Node[WIDTH][HEIGHT];
+        backgroundImage = new Texture(Gdx.files.internal("grid.png"));
 	}
 	
-	public void render() {
+	public void tick() {
 		
+	}
+	
+	public void render(Batch batch) {
+        batch.draw(backgroundImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	public void generate() {

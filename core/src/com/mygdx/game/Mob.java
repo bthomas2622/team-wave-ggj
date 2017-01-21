@@ -76,4 +76,8 @@ public class Mob {
 	public void dispose(){
 		mobImage.dispose();
 	}
+	
+	public void onCollide(Object entity) {
+		
+	}
 }
