@@ -58,13 +58,13 @@ public class Map {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-		bodyDef.position.set(x, y);
-
+		bodyDef.position.set(x / game.PIXELS_TO_METERS, y / game.PIXELS_TO_METERS);
+        System.out.println(bodyDef.position);
 		Body body = world.createBody(bodyDef);
 
 		PolygonShape shape = new PolygonShape();
 
-		shape.setAsBox(width, height);
+		shape.setAsBox(width / 2f / game.PIXELS_TO_METERS, height / 2f / game.PIXELS_TO_METERS);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
