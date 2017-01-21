@@ -53,6 +53,7 @@ public class Map {
 	public void generate() {
 		generateNodes();
 		Mob startingPlayer = new Mob(game, createBody(960, 540,Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[2][1]);
+		startingPlayer.controlled = true;
 		game.mobs.add(startingPlayer);
 
 		for (int x = 0; x < MOB_NUMBERS; x++) {
@@ -81,6 +82,8 @@ public class Map {
 		}
 		*/
 	}
+	
+//	public 
 
 	// Returns the pixel location of a node based on its position in the node array nodes
 	public static Point getNodePixelPosition(Node node) {
