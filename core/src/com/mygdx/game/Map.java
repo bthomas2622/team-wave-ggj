@@ -48,9 +48,10 @@ public class Map {
         backgroundImage = new Texture(Gdx.files.internal("grid.png"));
         
         rayHandler = new RayHandler(world);
-        rayHandler.setAmbientLight(0.8f);
+        rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.2f);
         rayHandler.setShadows(true);
-        DirectionalLight sun = new DirectionalLight(rayHandler, 64, new Color(0.8f,0.8f,0.8f,0.8f), 130);
+        rayHandler.setBlur(true);
+        RayHandler.useDiffuseLight(true);
 	}
 	
 	public void tick() {
@@ -101,8 +102,8 @@ public class Map {
 			for (int y = 0; y <= HEIGHT; y++) {
 				Body body = createStaticBody(-192 + INITIAL_NODE_PIXEL_OFFSET_X + x * INITIAL_NODE_PIXEL_SIZE * 2,
 						-192 + INITIAL_NODE_PIXEL_OFFSET_Y + y * INITIAL_NODE_PIXEL_SIZE * 2, 192, 192);
-				PointLight buildingLight = new PointLight(rayHandler, 32, new Color(0.8f, 0.8f, 0.8f, 0.3f), 15, 0, 0);
-				buildingLight.attachToBody(body);
+				PointLight buildingLight = new PointLight(rayHandler, 32, new Color(1f, 1f, 1f, 1f), 456 / game.PIXELS_TO_METERS, 0, 0);
+				buildingLight.attachToBody(body, 0, 0);
 				buildingLight.setIgnoreAttachedBody(true);
 			}
 		}
