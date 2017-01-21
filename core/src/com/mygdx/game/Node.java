@@ -22,10 +22,6 @@ public class Node
 		return yPos;
 	}
 
-	public void setNeighborNodes(Node left, Node right, Node above, Node below) {
-
-	}
-
 	public Node[] getNeighborNodes() {
 		return null;
 	}
