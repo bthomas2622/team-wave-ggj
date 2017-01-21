@@ -1,10 +1,11 @@
 package com.mygdx.game;
 
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -61,6 +62,8 @@ public class gameScreen implements Screen {
         }
         game.batch.end();
         debugRenderer.render(map.world, debugMatrix);
+        map.rayHandler.setCombinedMatrix(debugMatrix, 0, 0, camera.viewportWidth / PIXELS_TO_METERS, camera.viewportHeight / PIXELS_TO_METERS);
+        ((RayHandler) map.rayHandler).updateAndRender();
     }
 
     @Override

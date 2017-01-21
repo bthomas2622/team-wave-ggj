@@ -1,6 +1,13 @@
 package com.mygdx.game;
 
+import java.awt.Point;
+
+import box2dLight.DirectionalLight;
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -10,8 +17,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-
-import java.awt.Point;
 
 public class Map {
 
@@ -30,6 +35,7 @@ public class Map {
 	gameScreen game;
 
 	World world;
+	RayHandler rayHandler;
 	
 	Node[][] nodes;
 	
@@ -40,6 +46,11 @@ public class Map {
 		world = new World(new Vector2(0, 0), false);
 		nodes = new Node[WIDTH][HEIGHT];
         backgroundImage = new Texture(Gdx.files.internal("grid.png"));
+        
+        rayHandler = new RayHandler(world);
+        rayHandler.setAmbientLight(0.8f);
+        rayHandler.setShadows(true);
+        DirectionalLight sun = new DirectionalLight(rayHandler, 64, new Color(0.8f,0.8f,0.8f,0.8f), 130);
 	}
 	
 	public void tick() {
@@ -88,8 +99,11 @@ public class Map {
 	public void generateBuildingBodies() {
 		for (int x = 0; x <= WIDTH; x++) {
 			for (int y = 0; y <= HEIGHT; y++) {
-				createStaticBody(-192 + INITIAL_NODE_PIXEL_OFFSET_X + x * INITIAL_NODE_PIXEL_SIZE * 2,
+				Body body = createStaticBody(-192 + INITIAL_NODE_PIXEL_OFFSET_X + x * INITIAL_NODE_PIXEL_SIZE * 2,
 						-192 + INITIAL_NODE_PIXEL_OFFSET_Y + y * INITIAL_NODE_PIXEL_SIZE * 2, 192, 192);
+				PointLight buildingLight = new PointLight(rayHandler, 32, new Color(0.8f, 0.8f, 0.8f, 0.3f), 15, 0, 0);
+				buildingLight.attachToBody(body);
+				buildingLight.setIgnoreAttachedBody(true);
 			}
 		}
 	}
