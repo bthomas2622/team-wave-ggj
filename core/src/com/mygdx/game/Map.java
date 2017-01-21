@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import java.awt.Point;
 
-import box2dLight.DirectionalLight;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
@@ -44,6 +43,7 @@ public class Map {
 	public Map(gameScreen game) {
 		this.game = game;
 		world = new World(new Vector2(0, 0), false);
+		world.setContactListener(new CollisionListener());
 		nodes = new Node[WIDTH][HEIGHT];
         backgroundImage = new Texture(Gdx.files.internal("grid.png"));
         
