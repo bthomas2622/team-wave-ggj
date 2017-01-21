@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by bthom on 1/20/2017.
@@ -13,10 +13,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class gameScreen implements Screen {
     final TeamWave game;
     Texture backgroundImage;
+    
+    Map map;
+    Array<Mob> mobs;
 
     public gameScreen(final TeamWave gam) {
         game = gam;
         backgroundImage = new Texture(Gdx.files.internal("grid.png"));
+        map = new Map(this);
+        mobs = new Array<Mob>();
+        
+        map.generate();
     }
 
     @Override
