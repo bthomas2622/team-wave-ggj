@@ -99,8 +99,9 @@ public class Mob implements Collideable {
 
 	@Override
 	public void onCollide(Collideable object) {
-		// TODO Auto-generated method stub
-		
+		if (object instanceof WaveObject) {
+			controlled = true;
+		}	
 	}
 
 }
