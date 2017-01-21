@@ -12,7 +12,7 @@ public class Mob implements Collideable {
 	gameScreen game;
 	Texture mobImage;
 	Texture wave_drop = new Texture(Gdx.files.internal("blue_drop.png"));
-    Sprite mobSprite;
+    Sprite mobSprite,dropSprite;
     float MobDice;
 	
 	static final int BODY_WIDTH = 80;
@@ -42,7 +42,7 @@ public class Mob implements Collideable {
         mobSprite.setPosition(body.getPosition().x, body.getPosition().y);
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
-
+		wave();
         body.setUserData(this);
 	}
 
@@ -60,6 +60,7 @@ public class Mob implements Collideable {
 
 	public void render(Batch batch) {
         batch.draw(mobSprite, mobSprite.getX(), mobSprite.getY(), mobSprite.getOriginX(), mobSprite.getOriginY(), mobSprite.getWidth(), mobSprite.getHeight(), mobSprite.getScaleX(), mobSprite.getScaleY(), mobSprite.getRotation());
+		batch.draw(dropSprite, dropSprite.getX(), dropSprite.getY(), dropSprite.getOriginX(), dropSprite.getOriginY(), dropSprite.getWidth(), dropSprite.getHeight(), dropSprite.getScaleX(), dropSprite.getScaleY(), dropSprite.getRotation());
 	}
 
 	/**
@@ -72,7 +73,9 @@ public class Mob implements Collideable {
 	 * 2. TTL = Time to live. The projectile will expire after 's' seconds
 	 */
 	public void wave() {
-
+		dropSprite = new Sprite(wave_drop);
+		dropSprite.setPosition(mobSprite.getX()+25+48,mobSprite.getY()+40+48);
+		dropSprite.setOriginCenter();
 		
 	}
 	
