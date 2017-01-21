@@ -82,7 +82,7 @@ public class Map {
 	public void generateNodes() {
 		for (int x = 0; x < WIDTH; x++) {
 			for (int y = 0; y < HEIGHT; y++) {
-				Node newNode = new Node(x, y);
+				Node newNode = new Node(game, x, y);
 				nodes[x][y] = newNode;
 			}
 		}
@@ -110,9 +110,8 @@ public class Map {
 	}
 
 	// Returns the pixel location of a node based on its position in the node array nodes
-	public static Point getNodePixelPosition(Node node) {
+	public Point getNodePixelPosition(Node node) {
 		// Refactor this code if we want to allow the map to zoom in and out
-		// To refactor: make this method non-static, change the Note getPixelPos methods...
 		int xPos = INITIAL_NODE_PIXEL_OFFSET_X + node.getXPos() * INITIAL_NODE_PIXEL_SIZE * 2;
 		int yPos = INITIAL_NODE_PIXEL_OFFSET_Y + node.getYPos() * INITIAL_NODE_PIXEL_SIZE * 2;
 		return new Point(xPos, yPos);
@@ -121,6 +120,9 @@ public class Map {
 	public Body createBody(int x, int y, int width, int height) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
+
+		// fixing rotation
+		bodyDef.fixedRotation = true;
 
 		bodyDef.position.set(x / game.PIXELS_TO_METERS, y / game.PIXELS_TO_METERS);
         System.out.println(bodyDef.position);
