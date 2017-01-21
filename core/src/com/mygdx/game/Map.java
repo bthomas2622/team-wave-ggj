@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -24,7 +25,8 @@ public class Map {
 	// Number of "blocks" aka Nodes on the map
 	static final int WIDTH = 5;
 	static final int HEIGHT = 3;
-
+	static final int MOB_NUMBERS = 20;
+	
 	gameScreen game;
 
 	World world;
@@ -53,6 +55,13 @@ public class Map {
 		Mob startingPlayer = new Mob(game, createBody(960, 540,Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[2][1]);
 		game.mobs.add(startingPlayer);
 
+		for (int x = 0; x < MOB_NUMBERS; x++) {
+			int startingX = MathUtils.random(WIDTH);
+			int startingY = MathUtils.random(HEIGHT);
+			Point nodePosition = getNodePixelPosition(nodes[startingX][startingY]);
+			Mob newMob = new Mob(game, createBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[startingX][startingY]);
+			game.mobs.add(newMob);
+		}
 	}
 	
 	public void generateNodes() {
@@ -74,8 +83,9 @@ public class Map {
 	}
 
 	// Returns the pixel location of a node based on its position in the node array nodes
-	public Point getNodePixelPosition(Node node) {
+	public static Point getNodePixelPosition(Node node) {
 		// Refactor this code if we want to allow the map to zoom in and out
+		// To refactor: make this method non-static, change the Note getPixelPos methods...
 		int xPos = INITIAL_NODE_PIXEL_OFFSET_X + node.getXPos() * INITIAL_NODE_PIXEL_SIZE;
 		int yPos = INITIAL_NODE_PIXEL_OFFSET_Y + node.getYPos() * INITIAL_NODE_PIXEL_SIZE;
 		return new Point(xPos, yPos);
