@@ -58,8 +58,9 @@ public class Map {
 		for (int x = 0; x < MOB_NUMBERS; x++) {
 			int startingX = MathUtils.random(WIDTH);
 			int startingY = MathUtils.random(HEIGHT);
-			
-//			Mob newMob = new Mob(game, createBody(), nodes[]);
+			Point nodePosition = getNodePixelPosition(nodes[startingX][startingY]);
+			Mob newMob = new Mob(game, createBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[startingX][startingY]);
+			game.mobs.add(newMob);
 		}
 	}
 	
