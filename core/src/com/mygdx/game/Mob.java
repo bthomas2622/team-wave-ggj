@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,7 +12,7 @@ public class Mob implements Collideable {
 	
 	gameScreen game;
 	public static Texture mobImage;
-	public static Texture wave_drop = new Texture(Gdx.files.internal("blue_drop.png"));
+	public static Texture wave_drop = new Texture(Gdx.files.internal("waveProjectile.png"));
 
     Sprite mobSprite,dropSprite;
     float MobDice;
@@ -44,7 +45,6 @@ public class Mob implements Collideable {
 		System.out.println(mobSprite.getX());
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
-		wave();
         body.setUserData(this);
 	}
 
@@ -52,13 +52,21 @@ public class Mob implements Collideable {
 	public void tick() {
 
 		moveTowardTarget();
+		
+		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+			if (controlled && !waved) {
+				wave();
+			}
+		}
 
 	}
 
 	public void render(Batch batch) {
 		mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH/2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_HEIGHT/2f));
-		batch.draw(mobSprite, mobSprite.getX(), mobSprite.getY(), mobSprite.getOriginX(), mobSprite.getOriginY(), mobSprite.getWidth(), mobSprite.getHeight(), mobSprite.getScaleX(), mobSprite.getScaleY(), mobSprite.getRotation());
-		batch.draw(dropSprite, dropSprite.getX(), dropSprite.getY(), dropSprite.getOriginX(), dropSprite.getOriginY(), dropSprite.getWidth(), dropSprite.getHeight(), dropSprite.getScaleX(), dropSprite.getScaleY(), dropSprite.getRotation());
+        batch.draw(mobSprite, mobSprite.getX(), mobSprite.getY(), mobSprite.getOriginX(), mobSprite.getOriginY(), mobSprite.getWidth(), mobSprite.getHeight(), mobSprite.getScaleX(), mobSprite.getScaleY(), mobSprite.getRotation());
+		if (waved) {
+			batch.draw(dropSprite, dropSprite.getX(), dropSprite.getY(), dropSprite.getOriginX(), dropSprite.getOriginY(), dropSprite.getWidth(), dropSprite.getHeight(), dropSprite.getScaleX(), dropSprite.getScaleY(), dropSprite.getRotation());
+		}
 	}
 
 	/**
@@ -75,6 +83,7 @@ public class Mob implements Collideable {
 		dropSprite.setPosition(mobSprite.getX()+25+48,mobSprite.getY()+40+48);
 		dropSprite.setOriginCenter();
 		
+		waved = true;
 	}
 
 	public Node getTarget() {
@@ -152,8 +161,6 @@ public class Mob implements Collideable {
 		mobImage.dispose();
 	}
 
-	public void onCollide(Object entity) {
-		}
 	@Override
 	public void onCollide(Collideable object) {
 		if (object instanceof WaveObject) {
