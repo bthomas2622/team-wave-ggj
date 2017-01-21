@@ -11,8 +11,18 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.awt.Point;
+
 public class Map {
 
+	// adding some static variables to represent the pixel offsets for nodes
+	// Note: we are creating this as static finals now, but we could eventually add new ones
+	// to allow us to scale our map
+	public static final int INITIAL_NODE_PIXEL_OFFSET_X = 192;
+	public static final int INITIAL_NODE_PIXEL_OFFSET_Y = 156;
+	public static final int INITIAL_NODE_PIXEL_SIZE = 192;
+
+	// Number of "blocks" aka Nodes on the map
 	static final int WIDTH = 5;
 	static final int HEIGHT = 3;
 	static final int MOB_NUMBERS = 20;
@@ -54,12 +64,29 @@ public class Map {
 	}
 	
 	public void generateNodes() {
+		for (int x = 0; x < WIDTH; x++) {
+			for (int y = 0; y < HEIGHT; y++) {
+				Node newNode = new Node(x, y);
+				nodes[x][y] = newNode;
+			}
+		}
+		/* Legacy code that generates nodes using xPos / yPos as PIXEL locations (rather than nodes
+			array indices)
 		for (int x = 1; x <= WIDTH; x++) {
 			for (int y = 1; y <= HEIGHT; y++) {
 				Node newNode = new Node(x * 192, y * 192);
 				nodes[x - 1][y - 1] = newNode;
 			}
 		}
+		*/
+	}
+
+	// Returns the pixel location of a node based on its position in the node array nodes
+	public Point getNodePixelPosition(Node node) {
+		// Refactor this code if we want to allow the map to zoom in and out
+		int xPos = INITIAL_NODE_PIXEL_OFFSET_X + node.getXPos() * INITIAL_NODE_PIXEL_SIZE;
+		int yPos = INITIAL_NODE_PIXEL_OFFSET_Y + node.getYPos() * INITIAL_NODE_PIXEL_SIZE;
+		return new Point(xPos, yPos);
 	}
 
 	public Body createBody(int x, int y, int width, int height) {
