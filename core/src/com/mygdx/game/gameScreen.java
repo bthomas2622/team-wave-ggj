@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -22,11 +23,13 @@ public class gameScreen implements Screen {
     Box2DDebugRenderer debugRenderer;
     Matrix4 debugMatrix;
     OrthographicCamera camera;
+    Array<Sprite> buildings;
 
     public gameScreen(final TeamWave gam) {
         game = gam;
         map = new Map(this);
         mobs = new Array<Mob>();
+        buildings = new Array<Sprite>();
 
         map.generate();
         debugRenderer = new Box2DDebugRenderer();
@@ -59,6 +62,9 @@ public class gameScreen implements Screen {
         map.render(game.batch);
         for (Mob mob:mobs) {
             mob.render(game.batch);
+        }
+        for (Sprite building:buildings) {
+            game.batch.draw(building, building.getX(), building.getY(), building.getOriginX(), building.getOriginY(), building.getWidth(), building.getHeight(), building.getScaleX(), building.getScaleY(), building.getRotation());
         }
         game.batch.end();
         debugRenderer.render(map.world, debugMatrix);
