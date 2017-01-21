@@ -127,8 +127,6 @@ public class Mob implements Collideable {
 		mobImage.dispose();
 	}
 
-	public void onCollide(Object entity) {
-		}
 	@Override
 	public void onCollide(Collideable object) {
 		if (object instanceof WaveObject) {

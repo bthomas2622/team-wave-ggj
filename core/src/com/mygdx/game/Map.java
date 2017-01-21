@@ -52,6 +52,8 @@ public class Map {
 
 	public void generate() {
 		generateNodes();
+		generateBuildingBodies();
+		
 		Mob startingPlayer = new Mob(game, createBody(960, 540,Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[2][1]);
 		startingPlayer.controlled = true;
 		game.mobs.add(startingPlayer);
@@ -83,7 +85,14 @@ public class Map {
 		*/
 	}
 	
-//	public 
+	public void generateBuildingBodies() {
+		for (int x = 0; x <= WIDTH; x++) {
+			for (int y = 0; y <= HEIGHT; y++) {
+				createStaticBody(-192 + INITIAL_NODE_PIXEL_OFFSET_X + x * INITIAL_NODE_PIXEL_SIZE * 2,
+						-192 + INITIAL_NODE_PIXEL_OFFSET_Y + y * INITIAL_NODE_PIXEL_SIZE * 2, 192, 192);
+			}
+		}
+	}
 
 	// Returns the pixel location of a node based on its position in the node array nodes
 	public static Point getNodePixelPosition(Node node) {
@@ -97,6 +106,29 @@ public class Map {
 	public Body createBody(int x, int y, int width, int height) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
+
+		bodyDef.position.set(x / game.PIXELS_TO_METERS, y / game.PIXELS_TO_METERS);
+        System.out.println(bodyDef.position);
+		Body body = world.createBody(bodyDef);
+
+		PolygonShape shape = new PolygonShape();
+
+		shape.setAsBox(width / 2f / game.PIXELS_TO_METERS, height / 2f / game.PIXELS_TO_METERS);
+
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = shape;
+		fixtureDef.density = 1f;
+
+		body.createFixture(fixtureDef);
+
+		shape.dispose();
+
+		return body;
+	}
+	
+	public Body createStaticBody(int x, int y, int width, int height) {
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.StaticBody;
 
 		bodyDef.position.set(x / game.PIXELS_TO_METERS, y / game.PIXELS_TO_METERS);
         System.out.println(bodyDef.position);
