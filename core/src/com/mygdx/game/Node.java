@@ -29,9 +29,6 @@ public class Node
 		return Map.getNodePixelPosition(this).y;
 	}
 
-	public Node[] getNeighborNodes() {
-		return null;
-	}
 
 
 }

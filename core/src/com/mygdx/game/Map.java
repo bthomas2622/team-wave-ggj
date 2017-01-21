@@ -86,8 +86,8 @@ public class Map {
 	public static Point getNodePixelPosition(Node node) {
 		// Refactor this code if we want to allow the map to zoom in and out
 		// To refactor: make this method non-static, change the Note getPixelPos methods...
-		int xPos = INITIAL_NODE_PIXEL_OFFSET_X + node.getXPos() * INITIAL_NODE_PIXEL_SIZE;
-		int yPos = INITIAL_NODE_PIXEL_OFFSET_Y + node.getYPos() * INITIAL_NODE_PIXEL_SIZE;
+		int xPos = INITIAL_NODE_PIXEL_OFFSET_X + node.getXPos() * INITIAL_NODE_PIXEL_SIZE * 2;
+		int yPos = INITIAL_NODE_PIXEL_OFFSET_Y + node.getYPos() * INITIAL_NODE_PIXEL_SIZE * 2;
 		return new Point(xPos, yPos);
 	}
 
