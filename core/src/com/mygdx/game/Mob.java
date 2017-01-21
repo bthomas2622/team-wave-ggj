@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 
-public class Mob {
+public class Mob implements Collideable {
 	
 	gameScreen game;
 	Texture mobImage;
@@ -43,7 +43,7 @@ public class Mob {
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
 
-
+        body.setUserData(this);
 	}
 
 	// Method that gets called whenever the game is "updating"
@@ -97,7 +97,9 @@ public class Mob {
 		mobImage.dispose();
 	}
 
-	public void onCollide(Object entity) {
+	@Override
+	public void onCollide(Collideable object) {
+		// TODO Auto-generated method stub
 		
 	}
 
