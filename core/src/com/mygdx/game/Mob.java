@@ -50,7 +50,7 @@ public class Mob implements Collideable {
         System.out.println(mobSprite.getX());
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
-        wave();
+        //wave();
         body.setUserData(this);
     }
 
