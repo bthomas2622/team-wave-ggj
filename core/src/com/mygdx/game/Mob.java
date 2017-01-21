@@ -15,9 +15,9 @@ public class Mob implements Collideable {
 
     Sprite mobSprite;
     float MobDice;
-
-	static final int BODY_WIDTH = 80;
-	static final int BODY_HEIGHT = 50;
+	
+	static final int BODY_WIDTH = 50;
+	static final int BODY_HEIGHT = 80;
 
 	boolean controlled;		// Has been waved at
 	boolean waved;			// Has performed a wave
@@ -40,7 +40,8 @@ public class Mob implements Collideable {
             mobImage = new Texture(Gdx.files.internal("neutralPedestrian.png"));
             mobSprite = new Sprite(mobImage);
         }
-        mobSprite.setPosition(body.getPosition().x, body.getPosition().y);
+        mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH/2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_HEIGHT/2f));
+		System.out.println(mobSprite.getX());
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
 

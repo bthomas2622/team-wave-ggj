@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -14,11 +15,12 @@ import com.badlogic.gdx.utils.Array;
 
 public class gameScreen implements Screen {
     final TeamWave game;
-    
+    final float PIXELS_TO_METERS = 100f;
     Map map;
     Array<Mob> mobs;
     Box2DDebugRenderer debugRenderer;
     Matrix4 debugMatrix;
+    OrthographicCamera camera;
 
     public gameScreen(final TeamWave gam) {
         game = gam;
@@ -27,6 +29,8 @@ public class gameScreen implements Screen {
 
         map.generate();
         debugRenderer = new Box2DDebugRenderer();
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 1920, 1080);
     }
 
     //@Override
@@ -39,6 +43,7 @@ public class gameScreen implements Screen {
     @Override
     public void render (float delta) {
     	map.world.step(delta, 6, 2);
+        camera.update();
     	
     	map.tick();
     	for (Mob mob:mobs) {
@@ -47,18 +52,21 @@ public class gameScreen implements Screen {
     	
         Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        game.batch.setProjectionMatrix(camera.combined);
+        debugMatrix = game.batch.getProjectionMatrix().cpy().scale(PIXELS_TO_METERS, PIXELS_TO_METERS, 0);
         game.batch.begin();
         map.render(game.batch);
         for (Mob mob:mobs) {
             mob.render(game.batch);
         }
-        debugMatrix = game.batch.getProjectionMatrix().cpy();
         game.batch.end();
         debugRenderer.render(map.world, debugMatrix);
     }
 
     @Override
     public void resize(int width, int height) {
+        camera.setToOrtho(false, width, height);
+        camera.update();
     }
 
     @Override
