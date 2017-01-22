@@ -18,7 +18,7 @@ public class WaveObject implements Collideable {
 	gameScreen gameScreen;
 	Array<Body> bodies = new Array<Body>(20);
 	Array<Body> toDelete = new Array<Body>();
-	static final float LIFE_TIME = 1f;
+	static final float LIFE_TIME = 0.8f;
 	float lifeTimer = 0;
 	
 	public WaveObject(gameScreen gs) {
@@ -47,8 +47,8 @@ public class WaveObject implements Collideable {
 	 */
 	protected void positionDrops(float centerX, float centerY) {
 		dropSprite = new Sprite(wave_drop);
-		for (int i = 0; i < 360; i = i + 18) {
-			int r = 48;
+		for (int i = 0; i < 360; i = i + 9) {
+			int r = 32;
 			double x, y;
 			x = centerX + r * cos(i);
 			y = centerY + r * sin(i);
