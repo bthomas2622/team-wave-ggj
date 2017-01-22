@@ -84,7 +84,7 @@ public class Mob implements Collideable {
 		}
 
         if (!game.menuScreen) {
-            if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+            if ((Gdx.input.isKeyJustPressed(Keys.SPACE) && team == 1) || (Gdx.input.isKeyJustPressed(Keys.ENTER) && team == 2)) {
                 if (controlled && !waved) {
                     wave();
                 }

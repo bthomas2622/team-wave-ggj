@@ -68,6 +68,11 @@ public class gameScreen implements Screen {
         score = 0;
         remaining = 0;
         teamScores = new int[TEAMS];
+        
+
+        assetManager = new AssetManager();
+        assetManager.load("backgroundMusic.mp3", Music.class);
+        assetManager.finishLoading();
     }
     
     public void updateTeamScores() {
@@ -79,10 +84,6 @@ public class gameScreen implements Screen {
     			teamScores[mob.team-1]++;
     		}
     	}
-
-        assetManager = new AssetManager();
-        assetManager.load("backgroundMusic.mp3", Music.class);
-        assetManager.finishLoading();
     }
     
     public int countGreenRemaining() {
