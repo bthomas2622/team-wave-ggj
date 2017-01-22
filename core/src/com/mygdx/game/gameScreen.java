@@ -251,7 +251,7 @@ public class gameScreen implements Screen {
         
         if (shouldGameOver) {
         	timer += delta;
-        	if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && timer >= 1) {
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && timer >= 5) {
         		game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
                 dispose();
             	shouldGameOver = false;
