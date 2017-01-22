@@ -236,4 +236,8 @@ public class Map {
 	public Node[][] getNodes(){
 		return nodes;
 	}
+
+    public void dispose(){
+        world.dispose();
+    }
 }

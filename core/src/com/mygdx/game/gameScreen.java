@@ -110,6 +110,7 @@ public class gameScreen implements Screen {
     @Override
     public void dispose() {
         debugRenderer.dispose();
+        map.dispose();
     }
 
 
