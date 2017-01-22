@@ -76,7 +76,7 @@ public class gameOverScreen implements Screen {
         	fontOne.setColor(1, 1, 0, 1);
             fontOne.draw(game.batch, "YELLOW SCORE: " + this.score[3], Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/1.50f - 60);
         }
-        fontOne.setColor(0, 0, 0, 1);
+        fontOne.setColor(1, 1, 1, 1);
         fontOne.draw(game.batch, "Press SPACE to wave once more", Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/3.0f);
         game.batch.end();
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {

@@ -88,6 +88,7 @@ public class gameScreen implements Screen {
     		if (count > 5) {
     			System.out.println("GOT HERE");
     			game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
+                dispose();
     			break;
     		}
     		count++;
