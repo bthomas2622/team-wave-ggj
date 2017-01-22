@@ -92,18 +92,18 @@ public class Mob implements Collideable {
         }
 
 		if (atTarget()) {
-			if (pathSwitchTimer == PATH_SWITCH_TIMER_LENGTH){
-				path.changeNodePath(game.map, (int)getXPos(), (int)getYPos());
-				setTarget(path.nextNode());
-				pathSwitchTimer = 0;
-			}
-			else {
+//			if (pathSwitchTimer == PATH_SWITCH_TIMER_LENGTH){
+//				path.changeNodePath(game.map, (int)getXPos(), (int)getYPos());
+//				setTarget(path.nextNode());
+//				pathSwitchTimer = 0;
+//			}
+			//else {
 				//Node newTarget = target.getRandomNeighborNode();
 				setTarget(path.nextNode());
 				//System.out.println("Switching the target from (" + target.getYPos() +", " + target.getXPos() +") to (" + newTarget.getXPos() + ", " + newTarget.getYPos() + ").");
 				//setTarget(newTarget);
 				retargetTimer = RETARGET_TIME;
-			}
+			//}
 		}
 
 		// path swap handler
