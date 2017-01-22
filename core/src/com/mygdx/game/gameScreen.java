@@ -99,7 +99,7 @@ public class gameScreen implements Screen {
         	}
     		if (count > 5) {
     			game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
-                backgroundMusic.dispose();
+                dispose();
     			break;
     		}
     		count++;
@@ -144,9 +144,6 @@ public class gameScreen implements Screen {
     @Override
     public void render (float delta) {
         //make sure music is loaded
-    	if (updateTeamTurn) {
-    		useTeamTurn();
-    	}
         if (loaded == false){
             loaded = startMusic();
         }
@@ -245,6 +242,9 @@ public class gameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
             dispose();
+        }
+        if (updateTeamTurn) {
+            useTeamTurn();
         }
 
 
