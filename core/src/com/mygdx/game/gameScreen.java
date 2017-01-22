@@ -98,7 +98,6 @@ public class gameScreen implements Screen {
         		teamTurn = 1;
         	}
     		if (count > 5) {
-    			System.out.println("GOT HERE");
     			game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
                 dispose();
     			break;
@@ -126,6 +125,11 @@ public class gameScreen implements Screen {
     	for (Mob mob : mobs) {
     		if (mob.controlled && !mob.waved) {
     			teamRemaining[mob.team-1]++;
+    		}
+    	}
+    	for (int x = 0; x < TEAMS; x++) {
+    		if (x == teamTurn && teamRemaining[x] <= 0) {
+    			updateTeamTurn = true;
     		}
     	}
     }
