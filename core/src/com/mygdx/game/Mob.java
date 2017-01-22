@@ -177,8 +177,7 @@ public class Mob implements Collideable {
 			controlled = true;
 		}
 		
-		if (!body.getFixtureList().get(0).isSensor() && !object.getBody().getFixtureList().get(0).isSensor())
-		{
+		if (!body.getFixtureList().get(0).isSensor() && !(object instanceof WaveObject)) {
 			body.setLinearVelocity(MathUtils.random(-1, 1) , MathUtils.random(-1, 1));
 		}
 	}

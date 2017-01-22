@@ -172,10 +172,6 @@ public class Map {
 		fixtureDef.shape = shape;
 		fixtureDef.density = 1f;
 
-		// NOTE: REMOVE THIS LINE IF WE WANT COLLISIONS
-		fixtureDef.isSensor = true;
-		// THIS IS FALSE FOR TESTING
-
 		body.createFixture(fixtureDef);
 
 		shape.dispose();
