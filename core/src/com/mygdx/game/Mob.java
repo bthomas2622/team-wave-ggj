@@ -62,6 +62,9 @@ public class Mob implements Collideable {
 
     // Method that gets called whenever the game is "updating"
 	public void tick(float delta) {
+		if (wave != null) {
+			wave.tick(delta);
+		}
 		retargetTimer += delta;
 		if (retargetTimer >= RETARGET_TIME) {
 			moveTowardTarget();
