@@ -133,6 +133,7 @@ public class gameScreen implements Screen {
     			teamRemaining[mob.team-1]++;
     		}
     	}
+    	updateTeamTurn = false;
     	for (int x = 0; x < TEAMS; x++) {
     		if (x == teamTurn && teamRemaining[x] <= 0) {
     			updateTeamTurn = true;
