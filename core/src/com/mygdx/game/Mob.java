@@ -74,11 +74,13 @@ public class Mob implements Collideable {
 			retargetTimer = 0;
 		}
 
-		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-			if (controlled && !waved) {
-				wave();
-			}
-		}
+        if (!game.menuScreen) {
+            if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+                if (controlled && !waved) {
+                    wave();
+                }
+            }
+        }
 
 		if (atTarget()) {
 			//Node newTarget = target.getRandomNeighborNode();

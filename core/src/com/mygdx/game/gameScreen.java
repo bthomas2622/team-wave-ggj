@@ -6,10 +6,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Array;
 
 import box2dLight.RayHandler;
@@ -27,18 +29,30 @@ public class gameScreen implements Screen {
     Matrix4 debugMatrix;
     OrthographicCamera camera;
     Array<Sprite> buildings;
+    boolean menuScreen;
+    Texture pressSpace;
+    Sprite pressSpaceSprite;
 
-    public gameScreen(final TeamWave gam) {
+
+    public gameScreen(final TeamWave gam, boolean isMainMenu) {
         game = gam;
         map = new Map(this);
         mobs = new Array<Mob>();
         buildings = new Array<Sprite>();
+        menuScreen = isMainMenu;
 
         map.generate();
         debugRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1920, 1080);
-        camera.zoom = 5;
+        if (!menuScreen){
+            camera.zoom = 5;
+        }
+        if (menuScreen){
+            pressSpace = new Texture(Gdx.files.internal("pressSpace.png"));;
+            pressSpaceSprite = new Sprite(pressSpace);
+            pressSpaceSprite.setPosition(0f, 0f);
+        }
     }
 
     //@Override
@@ -50,14 +64,16 @@ public class gameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-    	if (camera.zoom > 1) {
-    		camera.zoom -= 0.1;
-    		camera.position.x = camera.viewportWidth/2;
-    		camera.position.y = camera.viewportHeight/2;
-    	}
-    	else {
-    		camera.zoom = 1;
-    	}
+        if (!menuScreen){
+            if (camera.zoom > 1) {
+                camera.zoom -= 0.1;
+                camera.position.x = camera.viewportWidth/2;
+                camera.position.y = camera.viewportHeight/2;
+            }
+            else {
+                camera.zoom = 1;
+            }
+        }
     	map.world.step(delta, 6, 2);
         camera.update();
 
@@ -78,16 +94,26 @@ public class gameScreen implements Screen {
         for (Sprite building : buildings) {
             game.batch.draw(building, building.getX(), building.getY(), building.getOriginX(), building.getOriginY(), building.getWidth(), building.getHeight(), building.getScaleX(), building.getScaleY(), building.getRotation());
         }
+        if (menuScreen){
+            game.batch.draw(pressSpaceSprite, pressSpaceSprite.getX(), pressSpaceSprite.getY(), pressSpaceSprite.getOriginX(), pressSpaceSprite.getOriginY(), pressSpaceSprite.getWidth(), pressSpaceSprite.getHeight(), pressSpaceSprite.getScaleX(), pressSpaceSprite.getScaleY(), pressSpaceSprite.getRotation());
+        }
         game.batch.end();
-        debugRenderer.render(map.world, debugMatrix);
+        //debugRenderer.render(map.world, debugMatrix);
         map.rayHandler.setCombinedMatrix(debugMatrix, 0, 0, camera.viewportWidth / PIXELS_TO_METERS, camera.viewportHeight / PIXELS_TO_METERS);
-        ((RayHandler) map.rayHandler).updateAndRender();
 
+        if (menuScreen){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                game.setScreen(new gameScreen(game, false));
+                dispose();
+            }
+        }
+        if (!menuScreen) {
+            ((RayHandler) map.rayHandler).updateAndRender();
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            game.setScreen(new gameScreen(game));
+            game.setScreen(new gameScreen(game, false));
             dispose();
         }
-
 
     }
 
@@ -115,7 +141,7 @@ public class gameScreen implements Screen {
 
     @Override
     public void dispose() {
-        debugRenderer.dispose();
+        //debugRenderer.dispose();
         map.dispose();
     }
 
