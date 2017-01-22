@@ -209,11 +209,14 @@ public class Mob implements Collideable {
 	@Override
 	public void onCollide(Collideable object) {
 		if (object instanceof WaveObject) {
-			controlled = true;
-            if(waved == false){
-                mobImage = new Texture(Gdx.files.internal("readyPedestrian.png"));
-                mobSprite = new Sprite(mobImage);
-            }
+			if (controlled == false) {
+				game.score++;
+				controlled = true;
+	            if(waved == false){
+	                mobImage = new Texture(Gdx.files.internal("readyPedestrian.png"));
+	                mobSprite = new Sprite(mobImage);
+	            }
+			}	
 		}
 		
 		if (!body.getFixtureList().get(0).isSensor() && !(object instanceof WaveObject)) {
