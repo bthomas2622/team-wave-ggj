@@ -17,7 +17,7 @@ public class Mob implements Collideable {
 
 	private static final float MOVE_SPEED = 2; //2
 
-	private static final float RETARGET_TIME = 0.1f; //.5
+	private static final float RETARGET_TIME = 0.5f; //.5
 	public static Texture mobImage = new Texture(Gdx.files.internal("pencilNeutralPedestrian.png"));
 	public static Texture mobImageReadyBlue = new Texture(Gdx.files.internal("pencilReadyPedestrianBlue.png"));
 	public static Texture mobImageReadyRed = new Texture(Gdx.files.internal("pencilReadyPedestrianRed.png"));
@@ -102,7 +102,6 @@ public class Mob implements Collideable {
 		if (atTarget()) {
 			if (pathSwitchTimer >= PATH_SWITCH_TIMER_LENGTH)
 			{
-				System.out.println("Changing the mob path now");
 				pathSwitchTimer = 0;
 				path.changeNodePath(game.map, target.getXPos(), target.getYPos());
 				setTarget(path.getCurrentNode());

@@ -79,8 +79,9 @@ public class Map {
 		for (int x = 0; x < MOB_NUMBERS; x++) {
 			int startingX = MathUtils.random(WIDTH - 1);
 			int startingY = MathUtils.random(HEIGHT - 1);
-			Point nodePosition = getNodePixelPosition(nodes[startingX][startingY]);
-			Mob newMob = new Mob(game, createRoundBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH), false, 0);//, nodes[startingX][startingY]);
+			int nodePosX = getNodePixelPosX(nodes[startingX][startingY]);
+			int nodePosY = getNodePixelPosY(nodes[startingX][startingY]);
+			Mob newMob = new Mob(game, createRoundBody(nodePosX, nodePosY, Mob.BODY_WIDTH), false, 0);//, nodes[startingX][startingY]);
 			game.mobs.add(newMob);
 		}
 	}
@@ -135,11 +136,15 @@ public class Map {
 	}
 
 	// Returns the pixel location of a node based on its position in the node array nodes
-	public Point getNodePixelPosition(Node node) {
+	public int getNodePixelPosX(Node node) {
 		// Refactor this code if we want to allow the map to zoom in and out
 		int xPos = INITIAL_NODE_PIXEL_OFFSET_X + node.getXPos() * INITIAL_NODE_PIXEL_SIZE * 2;
+		return xPos;
+	}
+
+	public int getNodePixelPosY(Node node) {
 		int yPos = INITIAL_NODE_PIXEL_OFFSET_Y + node.getYPos() * INITIAL_NODE_PIXEL_SIZE * 2;
-		return new Point(xPos, yPos);
+		return yPos;
 	}
 
 	public Body createBody(int x, int y, int width, int height) {
@@ -150,7 +155,7 @@ public class Map {
 		bodyDef.fixedRotation = true;
 
 		bodyDef.position.set(x / game.PIXELS_TO_METERS, y / game.PIXELS_TO_METERS);
-        System.out.println(bodyDef.position);
+        //System.out.println(bodyDef.position);
 		Body body = world.createBody(bodyDef);
 
 		PolygonShape shape = new PolygonShape();
@@ -203,7 +208,7 @@ public class Map {
 		bodyDef.type = BodyDef.BodyType.StaticBody;
 
 		bodyDef.position.set(x / game.PIXELS_TO_METERS, y / game.PIXELS_TO_METERS);
-        System.out.println(bodyDef.position);
+        //System.out.println(bodyDef.position);
 		Body body = world.createBody(bodyDef);
 
 		PolygonShape shape = new PolygonShape();

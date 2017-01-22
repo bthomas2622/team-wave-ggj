@@ -287,7 +287,6 @@ public class MobPath {
             // (because a randomly generated custom path is essentially just a destination path)
         }
         Node newTarget = path.get(0);
-        System.out.println("Generating new path from start (" + xStart + ", " + yStart + ") to  node (" + newTarget.getXPos() + ", " + newTarget.getYPos() +") ");
         return path;
     }
 
