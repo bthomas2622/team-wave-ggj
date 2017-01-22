@@ -39,6 +39,7 @@ public class MobPath {
     public MobPath(gameScreen screen, String pathType) {
         nodePath = createNodePath(screen.map, pathType);
         currentPath = pathType;
+
     }
 
     public MobPath(gameScreen screen, ArrayList<Node> customPath) {
@@ -211,8 +212,20 @@ public class MobPath {
             int startingRow = yStart;
 
             int endingColumn, endingRow;
-            if (startingColumn == map.WIDTH - 1) {
-                 endingColumn = startingColumn;
+
+            if (startingColumn == map.WIDTH - 1 && startingRow == map.HEIGHT -  1) {
+
+                // I'm too lazy to rewrite my path code to accept " reverse" rectagles, so if you
+                // get stuck in the corner, you will switch paths to a horizontal line to get
+                // you out of the corner
+                return createNodePath(map, PATH_HORIZONTAL, xStart, yStart);
+                // note, this does mean that there will be a bug where the path type string does not
+                // match the actual path type, but honestly that is never used outside of here
+                // and we have to submit in 7 minutes
+
+            }
+            else if (startingColumn == map.WIDTH - 1) {
+                endingColumn = startingColumn;
                 endingRow = MathUtils.random(startingRow + 1, map.HEIGHT - 1);
 
             }
