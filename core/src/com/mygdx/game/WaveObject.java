@@ -17,15 +17,27 @@ public class WaveObject implements Collideable {
 	Texture wave_drop = new Texture(Gdx.files.internal("waveProjectile.png"));
 	gameScreen gameScreen;
 	Array<Body> bodies = new Array<Body>(20);
-
+	Array<Body> toDelete = new Array<Body>();
+	static final float LIFE_TIME = 1f;
+	float lifeTimer = 0;
+	
 	public WaveObject(gameScreen gs) {
 		gameScreen = gs;
 	}
 
+	public void tick(float delta) {
+		lifeTimer += delta;
+		if (lifeTimer >= LIFE_TIME) {
+			for (Body body : bodies) {
+				body.getWorld().destroyBody(body);
+			}
+			bodies = new Array<Body>(20);
+		}
+	}
 
 	@Override
 	public void onCollide(Collideable object) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
@@ -43,7 +55,7 @@ public class WaveObject implements Collideable {
 			Body body = gameScreen.map.createBody(((int) x) + 8, (int) y + 8, 16, 16);
 
 
-			float velocity = (float) 0.5; // Your desired velocity of the car.
+			float velocity = (float) 1; // Your desired velocity of the car.
 			float angle = i; // Body angle in radians.
 
 			float velX = MathUtils.cos(angle) * velocity; // X-component.
@@ -56,9 +68,8 @@ public class WaveObject implements Collideable {
 
 	protected void drawWave(Batch batch) {
 		for (Body body: bodies) {
-			System.out.println("drawing");
-			dropSprite.setPosition(((float) body.getPosition().x * gameScreen.PIXELS_TO_METERS) - (16 / 2f), (float) body.getPosition().y * gameScreen.PIXELS_TO_METERS - (16 / 2f));
-			batch.draw(dropSprite, dropSprite.getX(), dropSprite.getY(), dropSprite.getOriginX(), dropSprite.getOriginY(), dropSprite.getWidth(), dropSprite.getHeight(), dropSprite.getScaleX(), dropSprite.getScaleY(), dropSprite.getRotation());
+			dropSprite.setPosition(((float) body.getPosition().x * gameScreen.PIXELS_TO_METERS) - (8 / 2f), (float) body.getPosition().y * gameScreen.PIXELS_TO_METERS - (8 / 2f));
+			batch.draw(dropSprite, dropSprite.getX(), dropSprite.getY(), dropSprite.getOriginX(), dropSprite.getOriginY(), dropSprite.getWidth() / 2, dropSprite.getHeight() / 2, dropSprite.getScaleX(), dropSprite.getScaleY(), dropSprite.getRotation());
 		}
 	}
 
