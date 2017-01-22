@@ -73,7 +73,7 @@ public class MobPath {
         else
             pathIndex -= 1;
 
-        System.out.println("Path index: " + pathIndex);
+        //System.out.println("Path index: " + pathIndex);
         return nodePath.get(pathIndex);
     }
 

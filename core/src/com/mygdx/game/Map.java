@@ -65,6 +65,7 @@ public class Map {
         rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.2f);
         rayHandler.setShadows(true);
         rayHandler.setBlur(true);
+		rayHandler.setCulling(false);
         RayHandler.useDiffuseLight(true);
 	}
 	
@@ -117,7 +118,7 @@ public class Map {
 			for (int y = 0; y <= HEIGHT; y++) {
 				Body body = createStaticBody(-192 + INITIAL_NODE_PIXEL_OFFSET_X + x * INITIAL_NODE_PIXEL_SIZE * 2,
 						-192 + INITIAL_NODE_PIXEL_OFFSET_Y + y * INITIAL_NODE_PIXEL_SIZE * 2, 192, 192);
-				PointLight buildingLight = new PointLight(rayHandler, 32, new Color(1f, 1f, 1f, 1f), 456 / game.PIXELS_TO_METERS, 0, 0);
+				PointLight buildingLight = new PointLight(rayHandler, 32, new Color(1f, 1f, 1f, .9f), 400 / game.PIXELS_TO_METERS, 0, 0);
 				buildingLight.attachToBody(body, 0, 0);
 				buildingLight.setIgnoreAttachedBody(true);
                 buildingRoller = MathUtils.random();

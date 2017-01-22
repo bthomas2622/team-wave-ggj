@@ -79,7 +79,7 @@ public class gameScreen implements Screen {
         }
         game.batch.end();
         debugRenderer.render(map.world, debugMatrix);
-        map.rayHandler.setCombinedMatrix(debugMatrix, 0, 0, camera.viewportWidth / PIXELS_TO_METERS, camera.viewportHeight / PIXELS_TO_METERS);
+      map.rayHandler.setCombinedMatrix(debugMatrix, 0, 0, camera.viewportWidth / PIXELS_TO_METERS, camera.viewportHeight / PIXELS_TO_METERS);
         ((RayHandler) map.rayHandler).updateAndRender();
 
 
