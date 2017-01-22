@@ -26,8 +26,9 @@ public class gameOverScreen implements Screen {
     BitmapFont fontOne;
     int score;
     int remaining;
+    int TEAMS;
 
-    public gameOverScreen(final TeamWave gam, int score, int remaining) {
+    public gameOverScreen(final TeamWave gam, int score, int remaining, int playerCount) {
         game = gam;
         camera = new OrthographicCamera();
         //camera.setToOrtho(false, 1280, 720);
@@ -47,6 +48,7 @@ public class gameOverScreen implements Screen {
         fontOne = new BitmapFont();
         fontOne.setColor(Color.BLACK);
         fontOne.getData().setScale(3f);
+        TEAMS = playerCount;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class gameOverScreen implements Screen {
         fontOne.draw(game.batch, "Press SPACE to wave once more", Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/1.7f);
         game.batch.end();
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.setScreen(new gameScreen(game, false));
+            game.setScreen(new gameScreen(game, false, TEAMS));
             dispose();
         }
 
@@ -77,7 +79,6 @@ public class gameOverScreen implements Screen {
 
     @Override
     public void hide(){
-        dispose();
     }
 
     @Override

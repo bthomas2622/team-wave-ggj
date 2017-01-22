@@ -11,7 +11,7 @@ public class TeamWave extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		//font = new BitmapFont(); //temp till create new FreeTypeFontGenerator
-		this.setScreen(new gameScreen(this, true));
+		this.setScreen(new gameScreen(this, true, 2));
 	}
 
 	@Override
