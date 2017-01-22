@@ -27,10 +27,12 @@ public class gameScreen implements Screen {
     OrthographicCamera camera;
     Array<Sprite> buildings;
     boolean menuScreen;
-    static Texture pressSpace = new Texture(Gdx.files.internal("pressSpace.png"));;
+    static Texture pressSpace = new Texture(Gdx.files.internal("pressSpace.png"));
     Sprite pressSpaceSprite;
+    static Texture playerAmount = new Texture(Gdx.files.internal("playerCount.png"));
+    Sprite playerAmountSprite;
     
-    final static int TEAMS = 4;
+    int TEAMS = 2;
     int[] teamScores;
     int[] teamRemaining;
     int teamTurn;
@@ -40,12 +42,13 @@ public class gameScreen implements Screen {
     Music backgroundMusic;
     boolean loaded = false;
 
-    public gameScreen(final TeamWave gam, boolean isMainMenu) {
+    public gameScreen(final TeamWave gam, boolean isMainMenu, int playerCount) {
         game = gam;
         map = new Map(this);
         mobs = new Array<Mob>();
         buildings = new Array<Sprite>();
         menuScreen = isMainMenu;
+        TEAMS = playerCount;
 
         map.generate();
         debugRenderer = new Box2DDebugRenderer();
@@ -57,6 +60,8 @@ public class gameScreen implements Screen {
         } else {
             pressSpaceSprite = new Sprite(pressSpace);
             pressSpaceSprite.setPosition(0f, 0f);
+            playerAmountSprite = new Sprite(playerAmount);
+            playerAmountSprite.setPosition(0f, 0f);
             camera.zoom = 1;
         }
         teamScores = new int[TEAMS];
@@ -82,7 +87,7 @@ public class gameScreen implements Screen {
         	}
     		if (count > 5) {
     			System.out.println("GOT HERE");
-    			game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS));
+    			game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
     			break;
     		}
     		count++;
@@ -170,6 +175,7 @@ public class gameScreen implements Screen {
         }
         if (menuScreen){
             game.batch.draw(pressSpaceSprite, pressSpaceSprite.getX(), pressSpaceSprite.getY(), pressSpaceSprite.getOriginX(), pressSpaceSprite.getOriginY(), pressSpaceSprite.getWidth(), pressSpaceSprite.getHeight(), pressSpaceSprite.getScaleX(), pressSpaceSprite.getScaleY(), pressSpaceSprite.getRotation());
+            game.batch.draw(playerAmountSprite, playerAmountSprite.getX(), playerAmountSprite.getY(), playerAmountSprite.getOriginX(), playerAmountSprite.getOriginY(), playerAmountSprite.getWidth(), playerAmountSprite.getHeight(), playerAmountSprite.getScaleX(), playerAmountSprite.getScaleY(), playerAmountSprite.getRotation());
         }
         game.batch.end();
         //debugRenderer.render(map.world, debugMatrix);
@@ -178,17 +184,32 @@ public class gameScreen implements Screen {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 menuScreen = false;
             }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+                game.setScreen(new gameScreen(game, false, 1));
+                dispose();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+                menuScreen = false;
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+                game.setScreen(new gameScreen(game, false, 3));
+                dispose();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+                game.setScreen(new gameScreen(game, false, 4));
+                dispose();
+            }
         }
 
 //        if (!menuScreen) {
 //            ((RayHandler) map.rayHandler).updateAndRender();
 //        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            game.setScreen(new gameScreen(game, false));
+            game.setScreen(new gameScreen(game, false, TEAMS));
             dispose();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS));
+            game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
             dispose();
         }
 
@@ -220,7 +241,6 @@ public class gameScreen implements Screen {
 
     @Override
     public void hide() {
-        dispose();
     }
 
     @Override
