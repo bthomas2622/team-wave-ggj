@@ -36,11 +36,13 @@ public class gameScreen implements Screen {
     boolean menuScreen;
     Texture pressSpace;
     Sprite pressSpaceSprite;
-    int score;
-    int remaining;
     
-    final static int TEAMS = 2;
+    final static int TEAMS = 4;
     int[] teamScores;
+    int[] teamRemaining;
+    int teamTurn;
+    boolean updateTeamTurn;
+    
     AssetManager assetManager;
     Music backgroundMusic;
     boolean loaded = false;
@@ -65,14 +67,35 @@ public class gameScreen implements Screen {
             pressSpaceSprite.setPosition(0f, 0f);
             camera.zoom = 1;
         }
-        score = 0;
-        remaining = 0;
         teamScores = new int[TEAMS];
-        
+        teamRemaining = new int[TEAMS];
+        teamTurn = 1;
 
         assetManager = new AssetManager();
         assetManager.load("backgroundMusic.mp3", Music.class);
         assetManager.finishLoading();
+    }
+    
+    public void useTeamTurn() {
+    	teamTurn++;
+    	
+    	if (teamTurn > TEAMS) {
+    		teamTurn = 1;
+    	}
+    	int count = 0;
+    	while (teamRemaining[teamTurn-1] <= 0) {
+    		teamTurn++;
+    		if (teamTurn > TEAMS) {
+        		teamTurn = 1;
+        	}
+    		if (count > 5) {
+    			System.out.println("GOT HERE");
+    			game.setScreen(new gameOverScreen(game, teamScores[0], map.MOB_NUMBERS));
+    			break;
+    		}
+    		count++;
+    	}
+    	updateTeamTurn = false; 
     }
     
     public void updateTeamScores() {
@@ -86,14 +109,15 @@ public class gameScreen implements Screen {
     	}
     }
     
-    public int countGreenRemaining() {
-    	int counter = 0;
+    public void countTeamRemaining() {
+    	for (int x = 0; x < TEAMS; x++) {
+    		teamRemaining[x] = 0;
+    	}
     	for (Mob mob : mobs) {
     		if (mob.controlled && !mob.waved) {
-    			counter++;
+    			teamRemaining[mob.team-1]++;
     		}
     	}
-    	return counter;
     }
 
     //@Override
@@ -106,6 +130,9 @@ public class gameScreen implements Screen {
     @Override
     public void render (float delta) {
         //make sure music is loaded
+    	if (updateTeamTurn) {
+    		useTeamTurn();
+    	}
         if (loaded == false){
             loaded = startMusic();
         }
@@ -119,7 +146,7 @@ public class gameScreen implements Screen {
                 camera.zoom = 1;
             }
         }
-    	remaining = countGreenRemaining();
+    	countTeamRemaining();
     	
     	if (camera.zoom > 1) {
     		camera.zoom -= 0.1;
@@ -170,7 +197,7 @@ public class gameScreen implements Screen {
             dispose();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new gameOverScreen(game, score, map.MOB_NUMBERS));
+            game.setScreen(new gameOverScreen(game, teamScores[0], map.MOB_NUMBERS));
             dispose();
         }
 

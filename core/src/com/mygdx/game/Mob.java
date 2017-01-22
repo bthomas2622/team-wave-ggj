@@ -84,10 +84,11 @@ public class Mob implements Collideable {
 		}
 
         if (!game.menuScreen) {
-            if ((Gdx.input.isKeyJustPressed(Keys.SPACE) && team == 1) || (Gdx.input.isKeyJustPressed(Keys.ENTER) && team == 2)) {
+            if ((Gdx.input.isKeyJustPressed(Keys.SPACE) && team == game.teamTurn)) {
                 if (controlled && !waved) {
                     wave();
                 }
+                game.updateTeamTurn = true;
             }
         }
 
@@ -117,6 +118,13 @@ public class Mob implements Collideable {
 		if (team == 2) {
 			colour = "Red";
 		}
+		else if (team == 3) {
+			colour = "Green";
+		}
+		else if (team == 4) {
+			colour = "Yellow";
+		}
+		
 		if (waved) {
             mobImage = new Texture(Gdx.files.internal("pencilSpentPedestrian"+ colour +".png"));
             mobSprite = new Sprite(mobImage);
@@ -250,7 +258,6 @@ public class Mob implements Collideable {
 	public void onCollide(Collideable object) {
 		if (object instanceof WaveObject) {
 			if (controlled == false || (((WaveObject)object).team != team && waved)) {
-				game.score++;
 				controlled = true;
 				team = ((WaveObject)object).team;
 				game.updateTeamScores();
