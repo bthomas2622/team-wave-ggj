@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class gameScreen implements Screen {
     final TeamWave game;
-    final float PIXELS_TO_METERS = 100f;
+    final static float PIXELS_TO_METERS = 100f;
     Map map;
     Array<Mob> mobs;
     Box2DDebugRenderer debugRenderer;
@@ -48,7 +48,7 @@ public class gameScreen implements Screen {
     	
     	map.tick();
     	for (Mob mob:mobs) {
-    		mob.tick();
+    		mob.tick(delta);
     	}
     	
         Gdx.gl.glClearColor(1, 1, 1, 0);

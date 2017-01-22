@@ -10,12 +10,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public class Mob implements Collideable {
 
-	static final int BODY_WIDTH = 50;
-	static final int BODY_HEIGHT = 80;
+	static final int BODY_WIDTH = 30;
 	// Variable that determines how close a mob needs to get to its target to be considered "at" it
-	private static final float TARGET_COLLISION_TOLERANCE = 1;
+	private static final float TARGET_COLLISION_TOLERANCE = 200 / gameScreen.PIXELS_TO_METERS;
 	// Amount moved by the mob per tick (in pixels)
 	private static final float MOVE_SPEED = 2;
+	private static final float RETARGET_TIME = 0.5f;
 	public static Texture mobImage;
 	gameScreen game;
 	WaveObject wave;
@@ -25,6 +25,7 @@ public class Mob implements Collideable {
 	boolean waved;			// Has performed a wave
     Node target;            // Node with the position the mob wants to move to
     Body body;                // Mob body
+    float retargetTimer;
 
     public Mob(gameScreen game, Body body, Node target) {
         this.game = game;
@@ -38,7 +39,7 @@ public class Mob implements Collideable {
             mobImage = new Texture(Gdx.files.internal("neutralPedestrian.png"));
             mobSprite = new Sprite(mobImage);
         }
-        mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_HEIGHT / 2f));
+        mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
         System.out.println(mobSprite.getX());
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
@@ -47,21 +48,30 @@ public class Mob implements Collideable {
     }
 
     // Method that gets called whenever the game is "updating"
-    public void tick() {
-
-		moveTowardTarget();
+    public void tick(float delta) {
+		retargetTimer += delta;
+    	if (retargetTimer >= RETARGET_TIME) {
+    		moveTowardTarget();
+    		retargetTimer = 0;
+    	}
 
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 			if (controlled && !waved) {
 				wave();
 			}
 		}
-
+		
+		if (atTarget()) {
+			Node newTarget = target.getRandomNeighborNode();
+			//System.out.println("Switching the target from (" + target.getYPos() +", " + target.getXPos() +") to (" + newTarget.getXPos() + ", " + newTarget.getYPos() + ").");
+			setTarget(newTarget);
+			retargetTimer = RETARGET_TIME;
+		}
     }
 
 	public void render(Batch batch) {
-		mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH/2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_HEIGHT/2f));
-        batch.draw(mobSprite, mobSprite.getX(), mobSprite.getY(), mobSprite.getOriginX(), mobSprite.getOriginY(), mobSprite.getWidth(), mobSprite.getHeight(), mobSprite.getScaleX(), mobSprite.getScaleY(), mobSprite.getRotation());
+        mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
+        batch.draw(mobSprite, mobSprite.getX(), mobSprite.getY(), mobSprite.getOriginX(), mobSprite.getOriginY(), mobSprite.getWidth() / 2, mobSprite.getHeight() / 2, mobSprite.getScaleX(), mobSprite.getScaleY(), mobSprite.getRotation());
 		if (waved) {
 			wave.drawWave(batch);
 		}
@@ -110,12 +120,6 @@ public class Mob implements Collideable {
         // diagonal movement paths
 
 		// I'm leaving the debug printlns in in case we ever decide to hone in on the issue
-
-		if (atTarget()) {
-			Node newTarget = target.getRandomNeighborNode();
-			//System.out.println("Switching the target from (" + target.getYPos() +", " + target.getXPos() +") to (" + newTarget.getXPos() + ", " + newTarget.getYPos() + ").");
-			setTarget(newTarget);
-		}
 
 		float deltaX = target.getXPixelPos() - this.getXPixelPos();
 		float deltaY = target.getYPixelPos() - this.getYPixelPos();
@@ -172,5 +176,14 @@ public class Mob implements Collideable {
 		if (object instanceof WaveObject) {
 			controlled = true;
 		}
+		
+		if (!body.getFixtureList().get(0).isSensor() && !object.getBody().getFixtureList().get(0).isSensor())
+		{
+			body.setLinearVelocity(MathUtils.random(-1, 1) , MathUtils.random(-1, 1));
+		}
+	}
+	
+	public Body getBody() {
+		return body;
 	}
 }

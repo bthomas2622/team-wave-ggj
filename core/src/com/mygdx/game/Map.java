@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -66,7 +67,7 @@ public class Map {
 		generateNodes();
 		generateBuildingBodies();
 		
-		Mob startingPlayer = new Mob(game, createBody(960, 540,Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[2][1]);
+		Mob startingPlayer = new Mob(game, createRoundBody(960, 540,Mob.BODY_WIDTH), nodes[2][1]);
 		startingPlayer.controlled = true;
 		game.mobs.add(startingPlayer);
 
@@ -74,7 +75,7 @@ public class Map {
 			int startingX = MathUtils.random(WIDTH - 1);
 			int startingY = MathUtils.random(HEIGHT - 1);
 			Point nodePosition = getNodePixelPosition(nodes[startingX][startingY]);
-			Mob newMob = new Mob(game, createBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH, Mob.BODY_HEIGHT), nodes[startingX][startingY]);
+			Mob newMob = new Mob(game, createRoundBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH), nodes[startingX][startingY]);
 			game.mobs.add(newMob);
 		}
 	}
@@ -139,6 +140,32 @@ public class Map {
 		// NOTE: REMOVE THIS LINE IF WE WANT COLLISIONS
 		fixtureDef.isSensor = true;
 		// THIS IS FALSE FOR TESTING
+
+		body.createFixture(fixtureDef);
+
+		shape.dispose();
+
+		return body;
+	}
+	
+	public Body createRoundBody(int x, int y, int radius) {
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.DynamicBody;
+
+		// fixing rotation
+		bodyDef.fixedRotation = true;
+
+		bodyDef.position.set(x / game.PIXELS_TO_METERS, y / game.PIXELS_TO_METERS);
+		Body body = world.createBody(bodyDef);
+
+		CircleShape shape = new CircleShape();
+
+		shape.setRadius(radius / 2f / game.PIXELS_TO_METERS); 
+		
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = shape;
+		fixtureDef.density = 1f;
+		fixtureDef.restitution = 1f;
 
 		body.createFixture(fixtureDef);
 

@@ -15,6 +15,7 @@ public class WaveObject implements Collideable {
 	Array<Sprite> dropSprites = new Array<Sprite>(20);
 	Texture wave_drop = new Texture(Gdx.files.internal("waveProjectile.png"));
 	gameScreen gameScreen;
+	Body body;
 
 	public WaveObject(gameScreen gs) {
 		gameScreen = gs;
@@ -40,7 +41,7 @@ public class WaveObject implements Collideable {
 			y = centerY + r * sin(i);
 			dropSprite.setPosition(((float) x), (float) y);
 			dropSprites.add(dropSprite);
-			Body body = gameScreen.map.createBody(((int) x) + 8, (int) y + 8, 16, 16);
+			body = gameScreen.map.createBody(((int) x) + 8, (int) y + 8, 16, 16);
 			body.setUserData(this);
 		}
 	}
@@ -50,5 +51,9 @@ public class WaveObject implements Collideable {
 			 ) {
 			batch.draw(thisSprite, thisSprite.getX(), thisSprite.getY(), thisSprite.getOriginX(), thisSprite.getOriginY(), thisSprite.getWidth(), thisSprite.getHeight(), thisSprite.getScaleX(), thisSprite.getScaleY(), thisSprite.getRotation());
 		}
+	}
+	
+	public Body getBody() {
+		return body;
 	}
 }
