@@ -35,7 +35,7 @@ public class Map {
 	
 	Node[][] nodes;
 	
-    Texture backgroundImage;
+    static Texture backgroundImage = new Texture(Gdx.files.internal("grid.png"));;
 
     //building assetts
     public static Texture building1 = new Texture(Gdx.files.internal("buildings/blueBuilding.png"));
@@ -54,7 +54,6 @@ public class Map {
 		world = new World(new Vector2(0, 0), false);
 		world.setContactListener(new CollisionListener());
 		nodes = new Node[WIDTH][HEIGHT];
-        backgroundImage = new Texture(Gdx.files.internal("grid.png"));
         
 	}
 	
@@ -109,22 +108,23 @@ public class Map {
 				Body body = createStaticBody(-192 + INITIAL_NODE_PIXEL_OFFSET_X + x * INITIAL_NODE_PIXEL_SIZE * 2,
 						-192 + INITIAL_NODE_PIXEL_OFFSET_Y + y * INITIAL_NODE_PIXEL_SIZE * 2, 192, 192);
                 buildingRoller = MathUtils.random();
+                buildingSprite = new Sprite(building1);
                 if (buildingRoller <= 0.125) {
-                    buildingSprite = new Sprite(building1);
+                    buildingSprite.setTexture(building1);
                 } else if (buildingRoller > 0.125 & buildingRoller <= 0.125*2){
-                    buildingSprite = new Sprite(building2);
+                	buildingSprite.setTexture(building2);
                 } else if (buildingRoller > 0.125*2 & buildingRoller <= 0.125*3){
-                    buildingSprite = new Sprite(building3);
+                	buildingSprite.setTexture(building3);
                 } else if (buildingRoller > 0.125*3 & buildingRoller <= 0.125*4){
-                    buildingSprite = new Sprite(building4);
+                	buildingSprite.setTexture(building4);
                 } else if (buildingRoller > 0.125*4 & buildingRoller <= 0.125*5){
-                    buildingSprite = new Sprite(building5);
+                	buildingSprite.setTexture(building5);
                 } else if (buildingRoller > 0.125*5 & buildingRoller <= 0.125*6){
-                    buildingSprite = new Sprite(building6);
+                	buildingSprite.setTexture(building6);
                 } else if (buildingRoller > 0.125*6 & buildingRoller <= 0.125*7){
-                    buildingSprite = new Sprite(building7);
+                	buildingSprite.setTexture(building7);
                 } else {
-                    buildingSprite = new Sprite(building8);
+                	buildingSprite.setTexture(building8);
                 }
                 buildingSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (INITIAL_NODE_PIXEL_SIZE / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (INITIAL_NODE_PIXEL_SIZE / 2f));
                 buildingSprite.setOriginCenter();

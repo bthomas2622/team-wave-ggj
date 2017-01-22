@@ -27,7 +27,7 @@ public class gameScreen implements Screen {
     OrthographicCamera camera;
     Array<Sprite> buildings;
     boolean menuScreen;
-    Texture pressSpace;
+    static Texture pressSpace = new Texture(Gdx.files.internal("pressSpace.png"));;
     Sprite pressSpaceSprite;
     
     final static int TEAMS = 4;
@@ -55,7 +55,6 @@ public class gameScreen implements Screen {
         if (!menuScreen){
             camera.zoom = 5;
         } else {
-            pressSpace = new Texture(Gdx.files.internal("pressSpace.png"));;
             pressSpaceSprite = new Sprite(pressSpace);
             pressSpaceSprite.setPosition(0f, 0f);
             camera.zoom = 1;
@@ -237,11 +236,11 @@ public class gameScreen implements Screen {
         map.dispose();
         assetManager.dispose();
         backgroundMusic.dispose();
-        try{
-            pressSpace.dispose();
-        }
-        catch (Exception e){
-        }
+//        try{
+//            pressSpace.dispose();
+//        }
+//        catch (Exception e){
+//        }
 
     }
 

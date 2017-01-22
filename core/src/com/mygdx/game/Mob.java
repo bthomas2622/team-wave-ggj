@@ -120,12 +120,11 @@ public class Mob implements Collideable {
 	}
 
 	public void render(Batch batch) {
-		System.out.println(team);
 		if (waved) {
 			if (team == 1) {
 				mobSprite.setTexture(mobImageSpentBlue);
 			}
-			if (team == 2) {
+			else if (team == 2) {
 				mobSprite.setTexture(mobImageSpentRed);
 			}
 			else if (team == 3) {
@@ -138,7 +137,7 @@ public class Mob implements Collideable {
         	if (team == 1) {
 				mobSprite.setTexture(mobImageReadyBlue);
 			}
-			if (team == 2) {
+        	else if (team == 2) {
 				mobSprite.setTexture(mobImageReadyRed);
 			}
 			else if (team == 3) {
@@ -148,7 +147,7 @@ public class Mob implements Collideable {
 				mobSprite.setTexture(mobImageReadyYellow);
 			}
         } else {
-            mobSprite = new Sprite(mobImage);
+            mobSprite.setTexture(mobImage);
         }
 		
 		mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
@@ -266,7 +265,7 @@ public class Mob implements Collideable {
 
     // Dispose Method
 	public void dispose(){
-		mobImage.dispose();
+//		mobImage.dispose();
 	}
 
 	@Override
