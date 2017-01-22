@@ -34,6 +34,9 @@ public class gameScreen implements Screen {
     Sprite pressSpaceSprite;
     int score;
     int remaining;
+    
+    final static int TEAMS = 2;
+    int[] teamScores;
 
     public gameScreen(final TeamWave gam, boolean isMainMenu) {
         game = gam;
@@ -57,6 +60,18 @@ public class gameScreen implements Screen {
         }
         score = 0;
         remaining = 0;
+        teamScores = new int[TEAMS];
+    }
+    
+    public void updateTeamScores() {
+    	for (int x = 0; x < TEAMS; x++) {
+    		teamScores[x] = 0;
+    	}
+    	for (Mob mob : mobs) {
+    		if (mob.controlled) {
+    			teamScores[mob.team-1]++;
+    		}
+    	}
     }
     
     public int countGreenRemaining() {
@@ -132,7 +147,7 @@ public class gameScreen implements Screen {
             }
         }
         if (!menuScreen) {
-            ((RayHandler) map.rayHandler).updateAndRender();
+//            ((RayHandler) map.rayHandler).updateAndRender();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             game.setScreen(new gameScreen(game, false));

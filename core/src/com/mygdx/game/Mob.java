@@ -16,7 +16,7 @@ public class Mob implements Collideable {
 	// Amount moved by the mob per tick (in pixels)
 	private static final float MOVE_SPEED = 2;
 	private static final float RETARGET_TIME = 0.5f;
-	public static Texture mobImage;
+	public Texture mobImage;
 	gameScreen game;
 	WaveObject wave;
     Sprite mobSprite;
@@ -28,25 +28,23 @@ public class Mob implements Collideable {
     Node target;            // Node with the position the mob wants to move to
     Body body;                // Mob body
 	float retargetTimer;
+	
+	int team;
 
     // Variable to store the mobs path
     private MobPath path;
 
     // Base constructor now takes in a mobpath
-    public Mob(gameScreen game, Body body,MobPath mobPath, boolean isStartingPlayer) {
+    public Mob(gameScreen game, Body body,MobPath mobPath, boolean isStartingPlayer, int team) {
         this.game = game;
         this.body = body;
+        this.team = team;
         this.startingPlayer = isStartingPlayer;
         //this.target = target;
         MobDice = MathUtils.random();
-        if (isStartingPlayer){
-            mobImage = new Texture(Gdx.files.internal("readyPedestrian.png"));
-            mobSprite = new Sprite(mobImage);
-        } else {
-            mobImage = new Texture(Gdx.files.internal("neutralPedestrian.png"));
-            mobSprite = new Sprite(mobImage);
-        }
-
+        mobImage = new Texture(Gdx.files.internal("pencilNeutralPedestrian.png"));
+        mobSprite = new Sprite(mobImage);
+        
         mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
         System.out.println(mobSprite.getX());
         mobSprite.setOriginCenter();
@@ -59,8 +57,8 @@ public class Mob implements Collideable {
     }
 
     // Alternate constructor creates a random path for the  mob
-    public Mob(gameScreen game, Body body, boolean isStartingPlayer) {
-        this(game, body, new MobPath(game, MobPath.getRandomPathType()), isStartingPlayer);
+    public Mob(gameScreen game, Body body, boolean isStartingPlayer, int team) {
+        this(game, body, new MobPath(game, MobPath.getRandomPathType()), isStartingPlayer, team);
     }
 
     // Method that gets called whenever the game is "updating"
@@ -92,6 +90,21 @@ public class Mob implements Collideable {
 	}
 
 	public void render(Batch batch) {
+		String colour = "Blue";
+		if (team == 2) {
+			colour = "Red";
+		}
+		if (waved) {
+            mobImage = new Texture(Gdx.files.internal("pencilSpentPedestrian"+ colour +".png"));
+            mobSprite = new Sprite(mobImage);
+        } else if (controlled) {
+            mobImage = new Texture(Gdx.files.internal("pencilReadyPedestrian" + colour + ".png"));
+            mobSprite = new Sprite(mobImage);
+        } else {
+        	mobImage = new Texture(Gdx.files.internal("pencilNeutralPedestrian.png"));
+            mobSprite = new Sprite(mobImage);
+        }
+		
 		mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
 		batch.draw(mobSprite, mobSprite.getX(), mobSprite.getY(), mobSprite.getOriginX(), mobSprite.getOriginY(), mobSprite.getWidth() / 2, mobSprite.getHeight() / 2, mobSprite.getScaleX(), mobSprite.getScaleY(), mobSprite.getRotation());
 		if (waved) {
@@ -110,11 +123,9 @@ public class Mob implements Collideable {
 	 * 2. TTL = Time to live. The projectile will expire after 's' seconds
      */
     public void wave() {
-		wave = new WaveObject(game);
+		wave = new WaveObject(game, team);
 		wave.positionDrops(mobSprite.getX() + 25, mobSprite.getY() + 40);
 		waved = true;
-        mobImage = new Texture(Gdx.files.internal("spentPedestrian.png"));
-        mobSprite = new Sprite(mobImage);
     }
 
     //  Move method to tie atTarget() and moveTowardTarget() together
@@ -211,13 +222,11 @@ public class Mob implements Collideable {
 	@Override
 	public void onCollide(Collideable object) {
 		if (object instanceof WaveObject) {
-			if (controlled == false) {
+			if (controlled == false || (((WaveObject)object).team != team && waved)) {
 				game.score++;
 				controlled = true;
-	            if(waved == false){
-	                mobImage = new Texture(Gdx.files.internal("readyPedestrian.png"));
-	                mobSprite = new Sprite(mobImage);
-	            }
+				team = ((WaveObject)object).team;
+				game.updateTeamScores();
 			}	
 		}
 		

@@ -14,15 +14,23 @@ import static java.lang.Math.sin;
 
 public class WaveObject implements Collideable {
 	Sprite dropSprite;
-	Texture wave_drop = new Texture(Gdx.files.internal("waveProjectile.png"));
+	Texture wave_drop;
 	gameScreen gameScreen;
 	Array<Body> bodies = new Array<Body>(20);
 	Array<Body> toDelete = new Array<Body>();
 	static final float LIFE_TIME = 0.8f;
 	float lifeTimer = 0;
+	int team;
 	
-	public WaveObject(gameScreen gs) {
+	public WaveObject(gameScreen gs, int team) {
 		gameScreen = gs;
+		this.team = team;
+		if (team == 1) {
+			wave_drop = new Texture(Gdx.files.internal("waveProjectileBlue.png"));
+		}
+		else {
+			wave_drop = new Texture(Gdx.files.internal("waveProjectileRed.png"));
+		}
 	}
 
 	public void tick(float delta) {
