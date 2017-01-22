@@ -27,7 +27,7 @@ public class gameScreen implements Screen {
     OrthographicCamera camera;
     Array<Sprite> buildings;
     boolean menuScreen;
-    static Texture pressSpace = new Texture(Gdx.files.internal("pressSpace.png"));
+    static Texture pressSpace = new Texture(Gdx.files.internal("pressSpaceSplash.png"));
     Sprite pressSpaceSprite;
     static Texture playerAmount = new Texture(Gdx.files.internal("playerCount.png"));
     Sprite playerAmountSprite;
