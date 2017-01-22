@@ -24,10 +24,11 @@ public class gameOverScreen implements Screen {
     Texture backgroundImage;
     float backgroundRoller;
     BitmapFont fontOne;
-    int score;
+    int[] score;
     int remaining;
+    int TEAMS;
 
-    public gameOverScreen(final TeamWave gam, int score, int remaining) {
+    public gameOverScreen(final TeamWave gam, int[] score, int remaining, int playerCount) {
         game = gam;
         camera = new OrthographicCamera();
         //camera.setToOrtho(false, 1280, 720);
@@ -47,6 +48,7 @@ public class gameOverScreen implements Screen {
         fontOne = new BitmapFont();
         fontOne.setColor(Color.BLACK);
         fontOne.getData().setScale(3f);
+        TEAMS = playerCount;
     }
 
     @Override
@@ -57,11 +59,28 @@ public class gameOverScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(backgroundImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        fontOne.draw(game.batch, this.score + " / " + this.remaining, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/1.50f);
-        fontOne.draw(game.batch, "Press SPACE to wave once more", Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/1.7f);
+       
+        if (score.length > 0) {
+        	fontOne.setColor(0, 0, 1, 1);
+            fontOne.draw(game.batch, "BLUE SCORE: " + this.score[0], Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()/1.50f + 20);
+        }
+        if (score.length > 1) {
+        	fontOne.setColor(1, 0, 0, 1);
+            fontOne.draw(game.batch, "RED SCORE: " + this.score[1], Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()/1.50f - 60);
+        }
+        if (score.length > 2) {
+        	fontOne.setColor(0, 1, 0, 1);
+            fontOne.draw(game.batch, "GREEN SCORE: " + this.score[2], Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/1.50f + 20);
+        }
+        if (score.length > 3) {
+        	fontOne.setColor(1, 1, 0, 1);
+            fontOne.draw(game.batch, "YELLOW SCORE: " + this.score[3], Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/1.50f - 60);
+        }
+        fontOne.setColor(1, 1, 1, 1);
+        fontOne.draw(game.batch, "Press SPACE to wave once more", Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/3.0f);
         game.batch.end();
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.setScreen(new gameScreen(game, false));
+            game.setScreen(new gameScreen(game, false, TEAMS));
             dispose();
         }
 
@@ -77,7 +96,6 @@ public class gameOverScreen implements Screen {
 
     @Override
     public void hide(){
-        dispose();
     }
 
     @Override
