@@ -39,7 +39,7 @@ public class gameScreen implements Screen {
     int score;
     int remaining;
     
-    final static int TEAMS = 2;
+    final static int TEAMS = 1;
     int[] teamScores;
     AssetManager assetManager;
     Music backgroundMusic;
