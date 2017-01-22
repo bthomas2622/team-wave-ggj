@@ -181,6 +181,7 @@ public class MobPath {
 
 
     public void changeNodePath(Map map, int xStart, int yStart) {
+        pathIndex = 0;
         currentPath = getRandomPathType();
         nodePath = createNodePath(map, currentPath, xStart, yStart);
     }
@@ -188,7 +189,7 @@ public class MobPath {
     // This is a super hacky, alternate behavior createNodePath that is designed for creating a
     // new path that starts at the current location
     // This makes it easy for mobs to switch paths
-    public static ArrayList<Node> createNodePath(Map map, String pathType, int xStart, int yStart) {
+    public ArrayList<Node> createNodePath(Map map, String pathType, int xStart, int yStart) {
         ArrayList<Node> path = new ArrayList<Node>();
         if (pathType == PATH_VERTICAL) {
             // Generating a random column to run up and down along the map
@@ -217,6 +218,7 @@ public class MobPath {
                 // I'm too lazy to rewrite my path code to accept " reverse" rectagles, so if you
                 // get stuck in the corner, you will switch paths to a horizontal line to get
                 // you out of the corner
+                currentPath = PATH_HORIZONTAL;
                 return createNodePath(map, PATH_HORIZONTAL, xStart, yStart);
                 // note, this does mean that there will be a bug where the path type string does not
                 // match the actual path type, but honestly that is never used outside of here
