@@ -1,11 +1,12 @@
-# **Press SPACE to Wave** by Ben Thomas
-## Global Game Jam 2017
-### Team Members
+# **Press SPACE to Wave** - Global Game Jam 2017
+
+## Team Members
 * Dominic Mortlock
 * Skanda Narendra Bhargav
 * Zac Patel
 * Ben Thomas
 
+##Download
 * [Desktop Download Page - TBD](https://google.com)
 * [Google Play Listing - TBD](https://google.com)
 
