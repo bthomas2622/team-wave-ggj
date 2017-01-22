@@ -207,11 +207,12 @@ public class MobPath {
         else if (pathType == PATH_RECTANGLE) {
             // first, we generate a starting column from 0 -> WIDTH - 2
             int startingColumn = xStart;
-            // then, we generate an ending column from  start to WIDTH - 1
-            int endingColumn = MathUtils.random(startingColumn +1, map.WIDTH - 1);
+
             // next, we do the same thing for rows
             int startingRow = yStart;
-            int endingRow = MathUtils.random(startingRow +1, map.HEIGHT - 1);
+
+            // then, we generate an ending column from  start to WIDTH - 1
+            int endingColumn, endingRow;
 
             if (startingColumn == map.WIDTH - 1 && startingRow == map.HEIGHT -  1) {
 
