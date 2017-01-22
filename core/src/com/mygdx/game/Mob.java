@@ -37,10 +37,10 @@ public class Mob implements Collideable {
 
 	// Variables to handle switching mob paths
 	// number of ticks before switching paths (1 second = 60 ticks
-	//public static final int PATH_SWITCH_TIMER_LENGTH = 300;
+	public static final int PATH_SWITCH_TIMER_LENGTH = 1200;
 
 	// local tick counter
-	//private int pathSwitchTimer = 0;
+	private int pathSwitchTimer = 0;
 
 
 
@@ -92,11 +92,23 @@ public class Mob implements Collideable {
         }
 
 		if (atTarget()) {
+			if (pathSwitchTimer >= PATH_SWITCH_TIMER_LENGTH)
+			{
+				System.out.println("Changing the mob path now");
+				pathSwitchTimer = 0;
+				path.changeNodePath(game.map, target.getXPos(), target.getYPos());
+				setTarget(path.getCurrentNode());
+			}
+			else {
 				setTarget(path.nextNode());
 
+
 				retargetTimer = RETARGET_TIME;
+			}
 		}
 
+		if (pathSwitchTimer < PATH_SWITCH_TIMER_LENGTH)
+			pathSwitchTimer += 1;
 	}
 
 	public void render(Batch batch) {

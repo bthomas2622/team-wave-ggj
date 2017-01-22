@@ -56,6 +56,7 @@ public class MobPath {
         // Rectangle paths are a special case because they loop unlike other paths
         if (currentPath == PATH_RECTANGLE)
         {
+            ascending = true;
             // Note: ascending is always true for rectangle paths
             if (pathIndex >= nodePath.size() - 1)
                 pathIndex = 0;
@@ -179,9 +180,12 @@ public class MobPath {
     }
 
 
+    // given the starting position of a mobpath, generate a custom path
     public void changeNodePath(Map map, int xStart, int yStart) {
+        // generates a random path
         currentPath = getRandomPathType();
         nodePath = createNodePath(map, currentPath, xStart, yStart);
+        pathIndex = 0;
     }
 
     // This is a super hacky, alternate behavior createNodePath that is designed for creating a
@@ -205,12 +209,24 @@ public class MobPath {
         else if (pathType == PATH_RECTANGLE) {
             // first, we generate a starting column from 0 -> WIDTH - 2
             int startingColumn = xStart;
-            // then, we generate an ending column from  start to WIDTH - 1
-            int endingColumn = MathUtils.random(startingColumn +1, map.WIDTH - 1);
-            // next, we do the same thing for rows
             int startingRow = yStart;
-            int endingRow = MathUtils.random(startingRow +1, map.HEIGHT - 1);
 
+            int endingColumn, endingRow;
+            if (startingColumn == map.WIDTH - 1) {
+                 endingColumn = startingColumn;
+                endingRow = MathUtils.random(startingRow + 1, map.HEIGHT - 1);
+
+            }
+            else if (startingRow == Map.HEIGHT - 1){
+                endingColumn = MathUtils.random(startingColumn + 1, map.WIDTH - 1);
+                endingRow = startingRow;
+            }
+            else {
+                // then, we generate an ending column from  start to WIDTH - 1
+                endingColumn = MathUtils.random(startingColumn + 1, map.WIDTH - 1);
+                endingRow = MathUtils.random(startingRow + 1, map.HEIGHT - 1);
+            }
+            
             //Then, we add the nodes from startingColumn, startingRow to endingColumn, Starting row
             for (int i = startingColumn; i <= endingColumn; i++)
                 //path.add(map.nodes[startingRow][i]);
@@ -271,8 +287,12 @@ public class MobPath {
             // Does nothing if the path is custom
             // (because a randomly generated custom path is essentially just a destination path)
         }
+        Node newTarget = path.get(0);
+        System.out.println("Generating new path from start (" + xStart + ", " + yStart + ") to  node (" + newTarget.getXPos() + ", " + newTarget.getYPos() +") ");
         return path;
     }
+
+
     public String getCurrentPathType() {
         return currentPath;
     }
