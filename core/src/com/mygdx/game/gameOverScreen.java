@@ -94,6 +94,7 @@ public class gameOverScreen implements Screen {
 
     @Override
     public void hide(){
+        dispose();
     }
 
     @Override
