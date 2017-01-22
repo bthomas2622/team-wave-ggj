@@ -5,20 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Array;
-
-import java.util.ArrayList;
-
-import box2dLight.RayHandler;
 
 /**
  * Created by bthom on 1/20/2017.
@@ -181,7 +174,6 @@ public class gameScreen implements Screen {
         }
         game.batch.end();
         //debugRenderer.render(map.world, debugMatrix);
-        map.rayHandler.setCombinedMatrix(debugMatrix, 0, 0, camera.viewportWidth / PIXELS_TO_METERS, camera.viewportHeight / PIXELS_TO_METERS);
 
         if (menuScreen){
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -251,15 +243,6 @@ public class gameScreen implements Screen {
         catch (Exception e){
         }
 
-        for (Mob mob : mobs) {
-            mob.mobImage.dispose();
-            try{
-                mob.wave.dispose();
-            }
-            catch (Exception e){
-
-            }
-        }
     }
 
 

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 
 /**
@@ -18,6 +17,10 @@ import com.badlogic.gdx.math.MathUtils;
 public class gameOverScreen implements Screen {
     final TeamWave game;
     OrthographicCamera camera;
+    static Texture backgroundImageBlue = new Texture(Gdx.files.internal("gameoverimages/gameOverBlue.png"));
+    static Texture backgroundImageGreen = new Texture(Gdx.files.internal("gameoverimages/gameOverGreen.png"));
+    static Texture backgroundImageOrange = new Texture(Gdx.files.internal("gameoverimages/gameOverOrange.png"));
+    static Texture backgroundImagePink = new Texture(Gdx.files.internal("gameoverimages/gameOverPink.png"));
     Texture backgroundImage;
     float backgroundRoller;
     BitmapFont fontOne;
@@ -31,13 +34,13 @@ public class gameOverScreen implements Screen {
         camera.setToOrtho(false, 1920, 1080);
         backgroundRoller = MathUtils.random();
         if (backgroundRoller <= 0.25f) {
-            backgroundImage = new Texture(Gdx.files.internal("gameoverimages/gameOverBlue.png"));
+            backgroundImage = backgroundImageBlue;
         } else if (backgroundRoller > 0.25f & backgroundRoller <= 0.5f){
-            backgroundImage = new Texture(Gdx.files.internal("gameoverimages/gameOverGreen.png"));
+            backgroundImage = backgroundImageGreen;
         } else if (backgroundRoller > 0.5f & backgroundRoller <= 0.75f){
-            backgroundImage = new Texture(Gdx.files.internal("gameoverimages/gameOverOrange.png"));
+            backgroundImage = backgroundImageOrange;
         } else {
-            backgroundImage = new Texture(Gdx.files.internal("gameoverimages/gameOverPink.png"));
+            backgroundImage = backgroundImagePink;
         }
         this.score = score;
         this.remaining = remaining;
