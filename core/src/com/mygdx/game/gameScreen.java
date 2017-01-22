@@ -82,7 +82,7 @@ public class gameScreen implements Screen {
         	}
     		if (count > 5) {
     			System.out.println("GOT HERE");
-    			game.setScreen(new gameOverScreen(game, teamScores[0], map.MOB_NUMBERS));
+    			game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS));
     			break;
     		}
     		count++;
@@ -188,7 +188,7 @@ public class gameScreen implements Screen {
             dispose();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new gameOverScreen(game, teamScores[0], map.MOB_NUMBERS));
+            game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS));
             dispose();
         }
 
