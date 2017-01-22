@@ -49,8 +49,11 @@ public class gameScreen implements Screen {
     public void render (float delta) {
     	if (camera.zoom > 1) {
     		camera.zoom -= 0.1;
-    		camera.position.x = 1920/2;
-    		camera.position.y = 1080/2;
+    		camera.position.x = camera.viewportWidth/2;
+    		camera.position.y = camera.viewportHeight/2;
+    	}
+    	else {
+    		camera.zoom = 1;
     	}
     	map.world.step(delta, 6, 2);
         camera.update();
