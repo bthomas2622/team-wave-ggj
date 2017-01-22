@@ -42,7 +42,6 @@ public class Mob implements Collideable {
         System.out.println(mobSprite.getX());
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
-        //wave();
         body.setUserData(this);
     }
 
@@ -72,9 +71,10 @@ public class Mob implements Collideable {
      * Place the projectiles around the person object in a circular fashion
      * Each projectile will be a 2x2 blue rectangle travelling for some 'd' distance
      * Number of projectiles = 360/18 = 20
-     * Need to calculate each projectiles center location (x/y) around the particular person object
-     * To be decided: 1. Velocity of the projectile
-     * 2. TTL = Time to live. The projectile will expire after 's' seconds
+	 * Need to calculate each projectiles center location (x,y) around the particular person object
+	 * To be decided:
+	 * 1. Velocity of the projectile
+	 * 2. TTL = Time to live. The projectile will expire after 's' seconds
      */
     public void wave() {
 		wave = new WaveObject(game);

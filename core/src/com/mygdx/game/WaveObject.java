@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 
@@ -41,9 +42,18 @@ public class WaveObject implements Collideable {
 			dropSprite.setPosition(((float) x), (float) y);
 			dropSprites.add(dropSprite);
 			Body body = gameScreen.map.createBody(((int) x) + 8, (int) y + 8, 16, 16);
+
+
+			float velocity = (float) 0.5; // Your desired velocity of the car.
+			float angle = i; // Body angle in radians.
+
+			float velX = MathUtils.cos(angle) * velocity; // X-component.
+			float velY = MathUtils.sin(angle) * velocity; // Y-component.
+			body.setLinearVelocity(velX, velY);
 			body.setUserData(this);
 		}
 	}
+
 
 	protected void drawWave(Batch batch) {
 		for (Sprite thisSprite : dropSprites
