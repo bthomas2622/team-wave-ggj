@@ -94,7 +94,7 @@ public class Mob implements Collideable {
 
 		if (atTarget()) {
 			if (pathSwitchTimer == PATH_SWITCH_TIMER_LENGTH){
-				setMobPath(new MobPath(game, MobPath.getRandomPathType()));
+				path.changeNodePath(game.map, (int)getXPos(), (int)getYPos());
 				setTarget(path.nextNode());
 				pathSwitchTimer = 0;
 			}
