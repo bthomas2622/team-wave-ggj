@@ -17,7 +17,7 @@ public class Mob implements Collideable {
 
 	private static final float MOVE_SPEED = 2; //2
 	private static final float RETARGET_TIME = 0.1f; //.5
-	public static Texture mobImage;
+	public Texture mobImage;
 	gameScreen game;
 	WaveObject wave;
     Sprite mobSprite;

@@ -39,7 +39,7 @@ public class gameScreen implements Screen {
     int score;
     int remaining;
     
-    final static int TEAMS = 1;
+    final static int TEAMS = 2;
     int[] teamScores;
     AssetManager assetManager;
     Music backgroundMusic;
@@ -218,6 +218,9 @@ public class gameScreen implements Screen {
         map.dispose();
         assetManager.dispose();
         backgroundMusic.dispose();
+        for (Mob mob : mobs) {
+            mob.mobImage.dispose();
+        }
     }
 
 
