@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,7 +40,6 @@ public class gameScreen implements Screen {
     static Texture yellowPlayer = new Texture(Gdx.files.internal("yellowFour.png"));
     Sprite playerTurn;
 
-
     int TEAMS = 2;
     int[] teamScores;
     int[] teamRemaining;
@@ -48,6 +48,8 @@ public class gameScreen implements Screen {
     
     AssetManager assetManager;
     Music backgroundMusic;
+    Sound waveSound;
+    //Sound menuChange;
     boolean loaded = false;
     Viewport viewport;
 
@@ -80,6 +82,8 @@ public class gameScreen implements Screen {
 
         assetManager = new AssetManager();
         assetManager.load("backgroundMusic.mp3", Music.class);
+        assetManager.load("wave.mp3", Sound.class);
+        //assetManager.load("menuChange.mp3", Sound.class);
         assetManager.finishLoading();
         
         viewport = new FitViewport(1920, 1080, camera);
@@ -170,7 +174,7 @@ public class gameScreen implements Screen {
     	map.world.step(delta, 6, 2);
         camera.update();
 
-    	map.tick();
+    	//map.tick();
     	for (Mob mob:mobs) {
             mob.tick(delta);
         }
@@ -256,6 +260,8 @@ public class gameScreen implements Screen {
             backgroundMusic.setLooping(true);
             backgroundMusic.setVolume(0.5f);
             backgroundMusic.play();
+            waveSound = assetManager.get("wave.mp3", Sound.class);
+            //menuChange = assetManager.get("menuChange.mp3", Sound.class);
             return true;
         }else {
             //System.out.println("not loaded yet");

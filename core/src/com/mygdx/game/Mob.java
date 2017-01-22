@@ -170,6 +170,7 @@ public class Mob implements Collideable {
 		wave = new WaveObject(game, team);
 		wave.positionDrops(mobSprite.getX() + 25, mobSprite.getY() + 40);
 		waved = true;
+		game.waveSound.play(.25f);
     }
 
     //  Move method to tie atTarget() and moveTowardTarget() together

@@ -3,6 +3,9 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -27,6 +30,10 @@ public class gameOverScreen implements Screen {
     int[] score;
     int remaining;
     int TEAMS;
+    AssetManager assetManager;
+    Sound menuChange;
+    boolean loaded = false;
+    boolean played = false;
 
     public gameOverScreen(final TeamWave gam, int[] score, int remaining, int playerCount) {
         game = gam;
@@ -49,10 +56,19 @@ public class gameOverScreen implements Screen {
         fontOne.setColor(Color.BLACK);
         fontOne.getData().setScale(3f);
         TEAMS = playerCount;
+        assetManager = new AssetManager();
+        assetManager.load("menuChange.mp3", Sound.class);
+        assetManager.finishLoading();
     }
 
     @Override
     public void render(float delta) {
+        if (loaded == false){
+            loaded = startMusic();
+        } else if (loaded == true & played == false){
+            menuChange.play();
+            played = true;
+        }
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
@@ -85,6 +101,17 @@ public class gameOverScreen implements Screen {
         }
 
     }
+
+    public boolean startMusic() {
+        if(assetManager.isLoaded("menuChange.mp3")) {
+            menuChange = assetManager.get("menuChange.mp3", Sound.class);
+            return true;
+        }else {
+            //System.out.println("not loaded yet");
+            return false;
+        }
+    }
+
     @Override
     public void resize(int width, int height){
 
@@ -110,5 +137,7 @@ public class gameOverScreen implements Screen {
     public void dispose(){
 //        backgroundImage.dispose();
         fontOne.dispose();
+        assetManager.dispose();
+        menuChange.dispose();
     }
 }
