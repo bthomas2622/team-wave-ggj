@@ -81,16 +81,17 @@ public class Map {
 		generateNodes();
 		generateBuildingBodies();
 
-		Mob startingPlayer = new Mob(game, createRoundBody(960, 540, Mob.BODY_WIDTH), true);//, nodes[2][1]);
-
-		startingPlayer.controlled = true;
-		game.mobs.add(startingPlayer);
+		for (int x = 1; x <= game.TEAMS; x++) {
+			Mob startingPlayer = new Mob(game, createRoundBody(960, 540, Mob.BODY_WIDTH), true, x);//, nodes[2][1]);
+			startingPlayer.controlled = true;
+			game.mobs.add(startingPlayer);
+		}
 
 		for (int x = 0; x < MOB_NUMBERS; x++) {
 			int startingX = MathUtils.random(WIDTH - 1);
 			int startingY = MathUtils.random(HEIGHT - 1);
 			Point nodePosition = getNodePixelPosition(nodes[startingX][startingY]);
-			Mob newMob = new Mob(game, createRoundBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH), false);//, nodes[startingX][startingY]);
+			Mob newMob = new Mob(game, createRoundBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH), false, 0);//, nodes[startingX][startingY]);
 			game.mobs.add(newMob);
 		}
 	}

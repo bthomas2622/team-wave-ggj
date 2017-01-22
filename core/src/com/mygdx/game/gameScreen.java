@@ -38,6 +38,9 @@ public class gameScreen implements Screen {
     Sprite pressSpaceSprite;
     int score;
     int remaining;
+    
+    final static int TEAMS = 2;
+    int[] teamScores;
     AssetManager assetManager;
     Music backgroundMusic;
     boolean loaded = false;
@@ -64,10 +67,23 @@ public class gameScreen implements Screen {
         }
         score = 0;
         remaining = 0;
+        teamScores = new int[TEAMS];
+        
 
         assetManager = new AssetManager();
         assetManager.load("backgroundMusic.mp3", Music.class);
         assetManager.finishLoading();
+    }
+    
+    public void updateTeamScores() {
+    	for (int x = 0; x < TEAMS; x++) {
+    		teamScores[x] = 0;
+    	}
+    	for (Mob mob : mobs) {
+    		if (mob.controlled) {
+    			teamScores[mob.team-1]++;
+    		}
+    	}
     }
     
     public int countGreenRemaining() {
@@ -145,6 +161,7 @@ public class gameScreen implements Screen {
                 menuScreen = false;
             }
         }
+
 //        if (!menuScreen) {
 //            ((RayHandler) map.rayHandler).updateAndRender();
 //        }
