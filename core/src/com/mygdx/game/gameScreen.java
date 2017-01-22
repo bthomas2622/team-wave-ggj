@@ -140,13 +140,12 @@ public class gameScreen implements Screen {
 
         if (menuScreen){
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                game.setScreen(new gameScreen(game, false));
-                dispose();
+                menuScreen = false;
             }
         }
-        if (!menuScreen) {
-            ((RayHandler) map.rayHandler).updateAndRender();
-        }
+//        if (!menuScreen) {
+//            ((RayHandler) map.rayHandler).updateAndRender();
+//        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             game.setScreen(new gameScreen(game, false));
             dispose();
