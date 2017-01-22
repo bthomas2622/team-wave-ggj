@@ -32,7 +32,8 @@ public class gameScreen implements Screen {
     boolean menuScreen;
     Texture pressSpace;
     Sprite pressSpaceSprite;
-
+    int score;
+    int remaining;
 
     public gameScreen(final TeamWave gam, boolean isMainMenu) {
         game = gam;
@@ -45,6 +46,7 @@ public class gameScreen implements Screen {
         debugRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1920, 1080);
+
         if (!menuScreen){
             camera.zoom = 5;
         }
@@ -53,6 +55,19 @@ public class gameScreen implements Screen {
             pressSpaceSprite = new Sprite(pressSpace);
             pressSpaceSprite.setPosition(0f, 0f);
         }
+        camera.zoom = 5;
+        score = 0;
+        remaining = 0;
+    }
+    
+    public int countGreenRemaining() {
+    	int counter = 0;
+    	for (Mob mob : mobs) {
+    		if (mob.controlled && !mob.waved) {
+    			counter++;
+    		}
+    	}
+    	return counter;
     }
 
     //@Override
@@ -66,7 +81,7 @@ public class gameScreen implements Screen {
     public void render (float delta) {
         if (!menuScreen){
             if (camera.zoom > 1) {
-                camera.zoom -= 0.1;
+                camera.zoom -= 0.08;
                 camera.position.x = camera.viewportWidth/2;
                 camera.position.y = camera.viewportHeight/2;
             }
@@ -74,6 +89,16 @@ public class gameScreen implements Screen {
                 camera.zoom = 1;
             }
         }
+    	remaining = countGreenRemaining();
+    	
+    	if (camera.zoom > 1) {
+    		camera.zoom -= 0.1;
+    		camera.position.x = camera.viewportWidth/2;
+    		camera.position.y = camera.viewportHeight/2;
+    	}
+    	else {
+    		camera.zoom = 1;
+    	}
     	map.world.step(delta, 6, 2);
         camera.update();
 
