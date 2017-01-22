@@ -21,6 +21,7 @@ public class Mob implements Collideable {
 	WaveObject wave;
     Sprite mobSprite;
     float MobDice;
+
 	boolean controlled;		// Has been waved at
 	boolean waved;			// Has performed a wave
     Node target;            // Node with the position the mob wants to move to
