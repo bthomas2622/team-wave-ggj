@@ -45,6 +45,7 @@ public class gameScreen implements Screen {
     int[] teamRemaining;
     int teamTurn;
     boolean updateTeamTurn;
+    boolean shouldGameOver;
     
     AssetManager assetManager;
     Music backgroundMusic;
@@ -102,8 +103,7 @@ public class gameScreen implements Screen {
         		teamTurn = 1;
         	}
     		if (count > 5) {
-    			game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
-                dispose();
+    			shouldGameOver = true;
     			break;
     		}
     		count++;
@@ -161,7 +161,6 @@ public class gameScreen implements Screen {
                 camera.zoom = 1;
             }
         }
-    	countTeamRemaining();
     	
     	if (camera.zoom > 1) {
     		camera.zoom -= 0.1;
@@ -244,9 +243,19 @@ public class gameScreen implements Screen {
             dispose();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
+        	game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
             dispose();
         }
+        
+        if (shouldGameOver) {
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        		game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
+                dispose();
+            	shouldGameOver = false;
+        	}
+        }
+    	countTeamRemaining();
+
         if (updateTeamTurn) {
             useTeamTurn();
         }
