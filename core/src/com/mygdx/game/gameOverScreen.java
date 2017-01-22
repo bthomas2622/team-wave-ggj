@@ -77,6 +77,7 @@ public class gameOverScreen implements Screen {
 
     @Override
     public void hide(){
+        dispose();
     }
 
     @Override
@@ -89,7 +90,7 @@ public class gameOverScreen implements Screen {
 
     @Override
     public void dispose(){
-        backgroundImage.dispose();
+//        backgroundImage.dispose();
         fontOne.dispose();
     }
 }

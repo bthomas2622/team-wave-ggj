@@ -35,7 +35,7 @@ public class Map {
 	
 	Node[][] nodes;
 	
-    Texture backgroundImage;
+    static Texture backgroundImage = new Texture(Gdx.files.internal("grid.png"));;
 
     //building assetts
     public static Texture building1 = new Texture(Gdx.files.internal("buildings/blueBuilding.png"));
@@ -54,7 +54,6 @@ public class Map {
 		world = new World(new Vector2(0, 0), false);
 		world.setContactListener(new CollisionListener());
 		nodes = new Node[WIDTH][HEIGHT];
-        backgroundImage = new Texture(Gdx.files.internal("grid.png"));
         
 	}
 	
@@ -79,8 +78,9 @@ public class Map {
 		for (int x = 0; x < MOB_NUMBERS; x++) {
 			int startingX = MathUtils.random(WIDTH - 1);
 			int startingY = MathUtils.random(HEIGHT - 1);
-			Point nodePosition = getNodePixelPosition(nodes[startingX][startingY]);
-			Mob newMob = new Mob(game, createRoundBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH), false, 0);//, nodes[startingX][startingY]);
+			int nodePosX = getNodePixelPosX(nodes[startingX][startingY]);
+			int nodePosY = getNodePixelPosY(nodes[startingX][startingY]);
+			Mob newMob = new Mob(game, createRoundBody(nodePosX, nodePosY, Mob.BODY_WIDTH), false, 0);//, nodes[startingX][startingY]);
 			game.mobs.add(newMob);
 		}
 	}
@@ -109,22 +109,23 @@ public class Map {
 				Body body = createStaticBody(-192 + INITIAL_NODE_PIXEL_OFFSET_X + x * INITIAL_NODE_PIXEL_SIZE * 2,
 						-192 + INITIAL_NODE_PIXEL_OFFSET_Y + y * INITIAL_NODE_PIXEL_SIZE * 2, 192, 192);
                 buildingRoller = MathUtils.random();
+                buildingSprite = new Sprite(building1);
                 if (buildingRoller <= 0.125) {
-                    buildingSprite = new Sprite(building1);
+                    buildingSprite.setTexture(building1);
                 } else if (buildingRoller > 0.125 & buildingRoller <= 0.125*2){
-                    buildingSprite = new Sprite(building2);
+                	buildingSprite.setTexture(building2);
                 } else if (buildingRoller > 0.125*2 & buildingRoller <= 0.125*3){
-                    buildingSprite = new Sprite(building3);
+                	buildingSprite.setTexture(building3);
                 } else if (buildingRoller > 0.125*3 & buildingRoller <= 0.125*4){
-                    buildingSprite = new Sprite(building4);
+                	buildingSprite.setTexture(building4);
                 } else if (buildingRoller > 0.125*4 & buildingRoller <= 0.125*5){
-                    buildingSprite = new Sprite(building5);
+                	buildingSprite.setTexture(building5);
                 } else if (buildingRoller > 0.125*5 & buildingRoller <= 0.125*6){
-                    buildingSprite = new Sprite(building6);
+                	buildingSprite.setTexture(building6);
                 } else if (buildingRoller > 0.125*6 & buildingRoller <= 0.125*7){
-                    buildingSprite = new Sprite(building7);
+                	buildingSprite.setTexture(building7);
                 } else {
-                    buildingSprite = new Sprite(building8);
+                	buildingSprite.setTexture(building8);
                 }
                 buildingSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (INITIAL_NODE_PIXEL_SIZE / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (INITIAL_NODE_PIXEL_SIZE / 2f));
                 buildingSprite.setOriginCenter();
@@ -135,11 +136,15 @@ public class Map {
 	}
 
 	// Returns the pixel location of a node based on its position in the node array nodes
-	public Point getNodePixelPosition(Node node) {
+	public int getNodePixelPosX(Node node) {
 		// Refactor this code if we want to allow the map to zoom in and out
 		int xPos = INITIAL_NODE_PIXEL_OFFSET_X + node.getXPos() * INITIAL_NODE_PIXEL_SIZE * 2;
+		return xPos;
+	}
+
+	public int getNodePixelPosY(Node node) {
 		int yPos = INITIAL_NODE_PIXEL_OFFSET_Y + node.getYPos() * INITIAL_NODE_PIXEL_SIZE * 2;
-		return new Point(xPos, yPos);
+		return yPos;
 	}
 
 	public Body createBody(int x, int y, int width, int height) {
@@ -150,7 +155,7 @@ public class Map {
 		bodyDef.fixedRotation = true;
 
 		bodyDef.position.set(x / game.PIXELS_TO_METERS, y / game.PIXELS_TO_METERS);
-        System.out.println(bodyDef.position);
+        //System.out.println(bodyDef.position);
 		Body body = world.createBody(bodyDef);
 
 		PolygonShape shape = new PolygonShape();
@@ -203,7 +208,7 @@ public class Map {
 		bodyDef.type = BodyDef.BodyType.StaticBody;
 
 		bodyDef.position.set(x / game.PIXELS_TO_METERS, y / game.PIXELS_TO_METERS);
-        System.out.println(bodyDef.position);
+        //System.out.println(bodyDef.position);
 		Body body = world.createBody(bodyDef);
 
 		PolygonShape shape = new PolygonShape();

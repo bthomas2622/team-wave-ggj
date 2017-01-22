@@ -28,11 +28,11 @@ public class Node
 	}
 
 	public int getXPixelPos() {
-		return game.map.getNodePixelPosition(this).x;
+		return game.map.getNodePixelPosX(this);
 	}
 
 	public int getYPixelPos() {
-		return game.map.getNodePixelPosition(this).y;
+		return game.map.getNodePixelPosY(this);
 	}
 
 

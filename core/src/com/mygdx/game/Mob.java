@@ -16,7 +16,8 @@ public class Mob implements Collideable {
 	// Amount moved by the mob per tick (in pixels)
 
 	private static final float MOVE_SPEED = 2; //2
-	private static final float RETARGET_TIME = 0.1f; //.5
+
+	private static final float RETARGET_TIME = 0.5f; //.5
 	public static Texture mobImage = new Texture(Gdx.files.internal("pencilNeutralPedestrian.png"));
 	public static Texture mobImageReadyBlue = new Texture(Gdx.files.internal("pencilReadyPedestrianBlue.png"));
 	public static Texture mobImageReadyRed = new Texture(Gdx.files.internal("pencilReadyPedestrianRed.png"));
@@ -45,7 +46,7 @@ public class Mob implements Collideable {
 
 	// Variables to handle switching mob paths
 	// number of ticks before switching paths (1 second = 60 ticks
-	public static final int PATH_SWITCH_TIMER_LENGTH = 300;
+	public static final int PATH_SWITCH_TIMER_LENGTH = 1200;
 
 	// local tick counter
 	private int pathSwitchTimer = 0;
@@ -99,33 +100,30 @@ public class Mob implements Collideable {
         }
 
 		if (atTarget()) {
-//			if (pathSwitchTimer == PATH_SWITCH_TIMER_LENGTH){
-//				path.changeNodePath(game.map, (int)getXPos(), (int)getYPos());
-//				setTarget(path.nextNode());
-//				pathSwitchTimer = 0;
-//			}
-			//else {
-				//Node newTarget = target.getRandomNeighborNode();
+			if (pathSwitchTimer >= PATH_SWITCH_TIMER_LENGTH)
+			{
+				pathSwitchTimer = 0;
+				path.changeNodePath(game.map, target.getXPos(), target.getYPos());
+				setTarget(path.getCurrentNode());
+			}
+			else {
 				setTarget(path.nextNode());
-				//System.out.println("Switching the target from (" + target.getYPos() +", " + target.getXPos() +") to (" + newTarget.getXPos() + ", " + newTarget.getYPos() + ").");
-				//setTarget(newTarget);
+
+
 				retargetTimer = RETARGET_TIME;
-			//}
+			}
 		}
 
-		// path swap handler
-		if (pathSwitchTimer < PATH_SWITCH_TIMER_LENGTH) {
+		if (pathSwitchTimer < PATH_SWITCH_TIMER_LENGTH)
 			pathSwitchTimer += 1;
-		}
 	}
 
 	public void render(Batch batch) {
-		System.out.println(team);
 		if (waved) {
 			if (team == 1) {
 				mobSprite.setTexture(mobImageSpentBlue);
 			}
-			if (team == 2) {
+			else if (team == 2) {
 				mobSprite.setTexture(mobImageSpentRed);
 			}
 			else if (team == 3) {
@@ -138,7 +136,7 @@ public class Mob implements Collideable {
         	if (team == 1) {
 				mobSprite.setTexture(mobImageReadyBlue);
 			}
-			if (team == 2) {
+        	else if (team == 2) {
 				mobSprite.setTexture(mobImageReadyRed);
 			}
 			else if (team == 3) {
@@ -148,7 +146,7 @@ public class Mob implements Collideable {
 				mobSprite.setTexture(mobImageReadyYellow);
 			}
         } else {
-            mobSprite = new Sprite(mobImage);
+            mobSprite.setTexture(mobImage);
         }
 		
 		mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
@@ -266,7 +264,7 @@ public class Mob implements Collideable {
 
     // Dispose Method
 	public void dispose(){
-		mobImage.dispose();
+//		mobImage.dispose();
 	}
 
 	@Override
