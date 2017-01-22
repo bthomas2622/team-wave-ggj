@@ -43,6 +43,7 @@ public class gameOverScreen implements Screen {
         this.remaining = remaining;
         fontOne = new BitmapFont();
         fontOne.setColor(Color.BLACK);
+        fontOne.getData().setScale(3f);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class gameOverScreen implements Screen {
         game.batch.begin();
         game.batch.draw(backgroundImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         fontOne.draw(game.batch, this.score + " / " + this.remaining, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/1.50f);
-        fontOne.draw(game.batch, "Press SPACE to wave once more", Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/1.55f);
+        fontOne.draw(game.batch, "Press SPACE to wave once more", Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/1.7f);
         game.batch.end();
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.setScreen(new gameScreen(game, false));

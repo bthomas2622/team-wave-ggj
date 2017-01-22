@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,6 +15,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Array;
+
+import java.util.ArrayList;
 
 import box2dLight.RayHandler;
 
@@ -37,6 +41,9 @@ public class gameScreen implements Screen {
     
     final static int TEAMS = 2;
     int[] teamScores;
+    AssetManager assetManager;
+    Music backgroundMusic;
+    boolean loaded = false;
 
     public gameScreen(final TeamWave gam, boolean isMainMenu) {
         game = gam;
@@ -72,6 +79,10 @@ public class gameScreen implements Screen {
     			teamScores[mob.team-1]++;
     		}
     	}
+
+        assetManager = new AssetManager();
+        assetManager.load("backgroundMusic.mp3", Music.class);
+        assetManager.finishLoading();
     }
     
     public int countGreenRemaining() {
@@ -93,6 +104,10 @@ public class gameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+        //make sure music is loaded
+        if (loaded == false){
+            loaded = startMusic();
+        }
         if (!menuScreen){
             if (camera.zoom > 1) {
                 camera.zoom -= 0.08;
@@ -142,22 +157,36 @@ public class gameScreen implements Screen {
 
         if (menuScreen){
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                game.setScreen(new gameScreen(game, false));
-                dispose();
+                menuScreen = false;
             }
         }
-        if (!menuScreen) {
+
+//        if (!menuScreen) {
 //            ((RayHandler) map.rayHandler).updateAndRender();
-        }
+//        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             game.setScreen(new gameScreen(game, false));
             dispose();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new gameOverScreen(game, score, remaining));
+            game.setScreen(new gameOverScreen(game, score, map.MOB_NUMBERS));
             dispose();
         }
 
+
+    }
+
+    public boolean startMusic() {
+        if(assetManager.isLoaded("backgroundMusic.mp3")) {
+            backgroundMusic = assetManager.get("backgroundMusic.mp3", Music.class);
+            backgroundMusic.setLooping(true);
+            backgroundMusic.setVolume(0.5f);
+            backgroundMusic.play();
+            return true;
+        }else {
+            //System.out.println("not loaded yet");
+            return false;
+        }
     }
 
     @Override
@@ -186,17 +215,9 @@ public class gameScreen implements Screen {
     public void dispose() {
         //debugRenderer.dispose();
         map.dispose();
+        assetManager.dispose();
+        backgroundMusic.dispose();
     }
 
-
-
-    // Experimental Code
-    public static void renderColorTrails(){
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-    }
+    
 }
