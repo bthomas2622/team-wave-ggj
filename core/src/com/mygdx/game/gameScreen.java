@@ -1,7 +1,5 @@
 package com.mygdx.game;
 
-import box2dLight.RayHandler;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,13 +9,15 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 
+import box2dLight.RayHandler;
+
 /**
  * Created by bthom on 1/20/2017.
  */
 
 public class gameScreen implements Screen {
-    final TeamWave game;
     final static float PIXELS_TO_METERS = 100f;
+    final TeamWave game;
     Map map;
     Array<Mob> mobs;
     Box2DDebugRenderer debugRenderer;
@@ -51,9 +51,9 @@ public class gameScreen implements Screen {
     	
     	map.tick();
     	for (Mob mob:mobs) {
-    		mob.tick(delta);
-    	}
-    	
+            mob.tick(delta);
+        }
+
         Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.setProjectionMatrix(camera.combined);
@@ -63,7 +63,7 @@ public class gameScreen implements Screen {
         for (Mob mob:mobs) {
             mob.render(game.batch);
         }
-        for (Sprite building:buildings) {
+        for (Sprite building : buildings) {
             game.batch.draw(building, building.getX(), building.getY(), building.getOriginX(), building.getOriginY(), building.getWidth(), building.getHeight(), building.getScaleX(), building.getScaleY(), building.getRotation());
         }
         game.batch.end();
