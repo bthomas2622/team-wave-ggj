@@ -37,6 +37,7 @@ public class gameScreen implements Screen {
         debugRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1920, 1080);
+        camera.zoom = 5;
     }
 
     //@Override
@@ -48,6 +49,11 @@ public class gameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+    	if (camera.zoom > 1) {
+    		camera.zoom -= 0.1;
+    		camera.position.x = 1920/2;
+    		camera.position.y = 1080/2;
+    	}
     	map.world.step(delta, 6, 2);
         camera.update();
 

@@ -73,14 +73,14 @@ public class Map {
 	}
 	
 	public void render(Batch batch) {
-        batch.draw(backgroundImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(backgroundImage, 0, 0, 1920, 1080);
 	}
 
 	public void generate() {
 		generateNodes();
 		generateBuildingBodies();
 
-		Mob startingPlayer = new Mob(game, createRoundBody(960, 540, Mob.BODY_WIDTH));//, nodes[2][1]);
+		Mob startingPlayer = new Mob(game, createRoundBody(960, 540, Mob.BODY_WIDTH), true);//, nodes[2][1]);
 
 		startingPlayer.controlled = true;
 		game.mobs.add(startingPlayer);
@@ -89,7 +89,7 @@ public class Map {
 			int startingX = MathUtils.random(WIDTH - 1);
 			int startingY = MathUtils.random(HEIGHT - 1);
 			Point nodePosition = getNodePixelPosition(nodes[startingX][startingY]);
-			Mob newMob = new Mob(game, createRoundBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH));//, nodes[startingX][startingY]);
+			Mob newMob = new Mob(game, createRoundBody(nodePosition.x, nodePosition.y, Mob.BODY_WIDTH), false);//, nodes[startingX][startingY]);
 			game.mobs.add(newMob);
 		}
 	}
