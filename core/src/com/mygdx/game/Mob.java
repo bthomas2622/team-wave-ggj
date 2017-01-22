@@ -16,7 +16,7 @@ public class Mob implements Collideable {
 	// Amount moved by the mob per tick (in pixels)
 
 	private static final float MOVE_SPEED = 2; //2
-	private static final float RETARGET_TIME = 0.1f; //.5
+	private static final float RETARGET_TIME = 0.5f; //.5
 	public Texture mobImage;
 	gameScreen game;
 	WaveObject wave;
@@ -37,10 +37,10 @@ public class Mob implements Collideable {
 
 	// Variables to handle switching mob paths
 	// number of ticks before switching paths (1 second = 60 ticks
-	public static final int PATH_SWITCH_TIMER_LENGTH = 300;
+	//public static final int PATH_SWITCH_TIMER_LENGTH = 300;
 
 	// local tick counter
-	private int pathSwitchTimer = 0;
+	//private int pathSwitchTimer = 0;
 
 
 
@@ -92,24 +92,11 @@ public class Mob implements Collideable {
         }
 
 		if (atTarget()) {
-//			if (pathSwitchTimer == PATH_SWITCH_TIMER_LENGTH){
-//				path.changeNodePath(game.map, (int)getXPos(), (int)getYPos());
-//				setTarget(path.nextNode());
-//				pathSwitchTimer = 0;
-//			}
-			//else {
-				//Node newTarget = target.getRandomNeighborNode();
 				setTarget(path.nextNode());
-				//System.out.println("Switching the target from (" + target.getYPos() +", " + target.getXPos() +") to (" + newTarget.getXPos() + ", " + newTarget.getYPos() + ").");
-				//setTarget(newTarget);
+
 				retargetTimer = RETARGET_TIME;
-			//}
 		}
 
-		// path swap handler
-		if (pathSwitchTimer < PATH_SWITCH_TIMER_LENGTH) {
-			pathSwitchTimer += 1;
-		}
 	}
 
 	public void render(Batch batch) {
