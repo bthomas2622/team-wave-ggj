@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by bthom on 1/20/2017.
@@ -47,6 +49,7 @@ public class gameScreen implements Screen {
     AssetManager assetManager;
     Music backgroundMusic;
     boolean loaded = false;
+    Viewport viewport;
 
     public gameScreen(final TeamWave gam, boolean isMainMenu, int playerCount) {
         game = gam;
@@ -78,6 +81,8 @@ public class gameScreen implements Screen {
         assetManager = new AssetManager();
         assetManager.load("backgroundMusic.mp3", Music.class);
         assetManager.finishLoading();
+        
+        viewport = new FitViewport(1920, 1080, camera);
     }
     
     public void useTeamTurn() {
@@ -255,8 +260,7 @@ public class gameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false, width, height);
-        camera.update();
+        viewport.update(width, height);
     }
 
     @Override
