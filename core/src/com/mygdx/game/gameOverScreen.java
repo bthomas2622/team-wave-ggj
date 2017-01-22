@@ -57,7 +57,7 @@ public class gameOverScreen implements Screen {
         fontOne.draw(game.batch, "Press SPACE to wave once more", Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/1.55f);
         game.batch.end();
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.setScreen(new gameScreen(game, true));
+            game.setScreen(new gameScreen(game, false));
             dispose();
         }
 
