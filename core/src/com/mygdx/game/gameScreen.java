@@ -138,6 +138,10 @@ public class gameScreen implements Screen {
             game.setScreen(new gameScreen(game, false));
             dispose();
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new gameOverScreen(game, score, remaining));
+            dispose();
+        }
 
     }
 
@@ -177,8 +181,6 @@ public class gameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
