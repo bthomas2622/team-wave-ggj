@@ -21,6 +21,7 @@ public class Mob implements Collideable {
 	WaveObject wave;
     Sprite mobSprite;
     float MobDice;
+    boolean startingPlayer;
 
 	boolean controlled;		// Has been waved at
 	boolean waved;			// Has performed a wave
@@ -32,18 +33,20 @@ public class Mob implements Collideable {
     private MobPath path;
 
     // Base constructor now takes in a mobpath
-    public Mob(gameScreen game, Body body,MobPath mobPath) {
+    public Mob(gameScreen game, Body body,MobPath mobPath, boolean isStartingPlayer) {
         this.game = game;
         this.body = body;
+        this.startingPlayer = isStartingPlayer;
         //this.target = target;
         MobDice = MathUtils.random();
-        if (MobDice > .5f) {
-            mobImage = new Texture(Gdx.files.internal("badPedestrian.png"));
+        if (isStartingPlayer){
+            mobImage = new Texture(Gdx.files.internal("readyPedestrian.png"));
             mobSprite = new Sprite(mobImage);
         } else {
             mobImage = new Texture(Gdx.files.internal("neutralPedestrian.png"));
             mobSprite = new Sprite(mobImage);
         }
+
         mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
         System.out.println(mobSprite.getX());
         mobSprite.setOriginCenter();
@@ -56,8 +59,8 @@ public class Mob implements Collideable {
     }
 
     // Alternate constructor creates a random path for the  mob
-    public Mob(gameScreen game, Body body) {
-        this(game, body, new MobPath(game, MobPath.getRandomPathType()));
+    public Mob(gameScreen game, Body body, boolean isStartingPlayer) {
+        this(game, body, new MobPath(game, MobPath.getRandomPathType()), isStartingPlayer);
     }
 
     // Method that gets called whenever the game is "updating"
@@ -71,7 +74,7 @@ public class Mob implements Collideable {
 			retargetTimer = 0;
 		}
 
-		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
 			if (controlled && !waved) {
 				wave();
 			}
@@ -108,6 +111,8 @@ public class Mob implements Collideable {
 		wave = new WaveObject(game);
 		wave.positionDrops(mobSprite.getX() + 25, mobSprite.getY() + 40);
 		waved = true;
+        mobImage = new Texture(Gdx.files.internal("spentPedestrian.png"));
+        mobSprite = new Sprite(mobImage);
     }
 
     //  Move method to tie atTarget() and moveTowardTarget() together
@@ -205,6 +210,10 @@ public class Mob implements Collideable {
 	public void onCollide(Collideable object) {
 		if (object instanceof WaveObject) {
 			controlled = true;
+            if(waved == false){
+                mobImage = new Texture(Gdx.files.internal("readyPedestrian.png"));
+                mobSprite = new Sprite(mobImage);
+            }
 		}
 		
 		if (!body.getFixtureList().get(0).isSensor() && !(object instanceof WaveObject)) {
