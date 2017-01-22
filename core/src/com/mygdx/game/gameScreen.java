@@ -218,7 +218,11 @@ public class gameScreen implements Screen {
         map.dispose();
         assetManager.dispose();
         backgroundMusic.dispose();
-        pressSpace.dispose();
+        try{
+            pressSpace.dispose();
+        }
+        catch (Exception e){
+        }
 
         for (Mob mob : mobs) {
             mob.mobImage.dispose();
