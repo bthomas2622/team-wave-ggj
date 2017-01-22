@@ -189,22 +189,23 @@ public class gameScreen implements Screen {
         if (menuScreen){
             game.batch.draw(pressSpaceSprite, pressSpaceSprite.getX(), pressSpaceSprite.getY(), pressSpaceSprite.getOriginX(), pressSpaceSprite.getOriginY(), pressSpaceSprite.getWidth(), pressSpaceSprite.getHeight(), pressSpaceSprite.getScaleX(), pressSpaceSprite.getScaleY(), pressSpaceSprite.getRotation());
             game.batch.draw(playerAmountSprite, playerAmountSprite.getX(), playerAmountSprite.getY(), playerAmountSprite.getOriginX(), playerAmountSprite.getOriginY(), playerAmountSprite.getWidth(), playerAmountSprite.getHeight(), playerAmountSprite.getScaleX(), playerAmountSprite.getScaleY(), playerAmountSprite.getRotation());
-        }
-        if (TEAMS > 1){
-            if (teamTurn == 1){
-                playerTurn.setTexture(bluePlayer);
-                playerTurn.setPosition(0f, 0f);
-            } else if (teamTurn == 2){
-                playerTurn.setTexture(redPlayer);
-                playerTurn.setPosition(0f, 0f);
-            } else if (teamTurn == 3) {
-                playerTurn.setTexture(greenPlayer);
-                playerTurn.setPosition(0f, 0f);
-            } else if (teamTurn == 4) {
-                playerTurn.setTexture(yellowPlayer);
-                playerTurn.setPosition(0f, 0f);
+        } else{
+            if (TEAMS > 1){
+                if (teamTurn == 1){
+                    playerTurn.setTexture(bluePlayer);
+                    playerTurn.setPosition(0f, 0f);
+                } else if (teamTurn == 2){
+                    playerTurn.setTexture(redPlayer);
+                    playerTurn.setPosition(0f, 0f);
+                } else if (teamTurn == 3) {
+                    playerTurn.setTexture(greenPlayer);
+                    playerTurn.setPosition(0f, 0f);
+                } else if (teamTurn == 4) {
+                    playerTurn.setTexture(yellowPlayer);
+                    playerTurn.setPosition(0f, 0f);
+                }
+                game.batch.draw(playerTurn, playerTurn.getX(), playerTurn.getY(), playerTurn.getOriginX(), playerTurn.getOriginY(), playerTurn.getWidth(), playerTurn.getHeight(), playerTurn.getScaleX(), playerTurn.getScaleY(), playerTurn.getRotation());
             }
-            game.batch.draw(playerTurn, playerTurn.getX(), playerTurn.getY(), playerTurn.getOriginX(), playerTurn.getOriginY(), playerTurn.getWidth(), playerTurn.getHeight(), playerTurn.getScaleX(), playerTurn.getScaleY(), playerTurn.getRotation());
         }
         game.batch.end();
         //debugRenderer.render(map.world, debugMatrix);
