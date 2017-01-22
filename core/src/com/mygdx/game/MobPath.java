@@ -57,6 +57,7 @@ public class MobPath {
         // Rectangle paths are a special case because they loop unlike other paths
         if (currentPath == PATH_RECTANGLE)
         {
+            ascending = true;
             // Note: ascending is always true for rectangle paths
             if (pathIndex >= nodePath.size() - 1)
                 pathIndex = 0;
@@ -190,6 +191,7 @@ public class MobPath {
     // new path that starts at the current location
     // This makes it easy for mobs to switch paths
     public ArrayList<Node> createNodePath(Map map, String pathType, int xStart, int yStart) {
+        pathIndex = 0;
         ArrayList<Node> path = new ArrayList<Node>();
         if (pathType == PATH_VERTICAL) {
             // Generating a random column to run up and down along the map
