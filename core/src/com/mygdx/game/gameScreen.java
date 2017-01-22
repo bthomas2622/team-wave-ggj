@@ -53,6 +53,7 @@ public class gameScreen implements Screen {
     //Sound menuChange;
     boolean loaded = false;
     Viewport viewport;
+    float timer;
 
     public gameScreen(final TeamWave gam, boolean isMainMenu, int playerCount) {
         game = gam;
@@ -88,6 +89,7 @@ public class gameScreen implements Screen {
         assetManager.finishLoading();
         
         viewport = new FitViewport(1920, 1080, camera);
+        shouldGameOver = false;
     }
     
     public void useTeamTurn() {
@@ -248,10 +250,12 @@ public class gameScreen implements Screen {
         }
         
         if (shouldGameOver) {
-        	if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        	timer += delta;
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && timer >= 1) {
         		game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
                 dispose();
             	shouldGameOver = false;
+            	timer = 0;
         	}
         }
     	countTeamRemaining();
