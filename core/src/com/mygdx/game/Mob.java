@@ -20,7 +20,7 @@ public class Mob implements Collideable {
     float MobDice;
 	
 	// Variable that determines how close a mob needs to get to its target to be considered "at" it
-	private static final float TARGET_COLLISION_TOLERANCE  = 1;
+	private static final float TARGET_COLLISION_TOLERANCE  = (float)1.1;
 
 	boolean controlled;		// Has been waved at
 	boolean waved;			// Has performed a wave
