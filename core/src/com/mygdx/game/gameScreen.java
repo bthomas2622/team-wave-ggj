@@ -33,7 +33,13 @@ public class gameScreen implements Screen {
     Sprite pressSpaceSprite;
     static Texture playerAmount = new Texture(Gdx.files.internal("playerCount.png"));
     Sprite playerAmountSprite;
-    
+    static Texture bluePlayer = new Texture(Gdx.files.internal("blueOne.png"));
+    static Texture redPlayer = new Texture(Gdx.files.internal("redTwo.png"));
+    static Texture greenPlayer = new Texture(Gdx.files.internal("greenThree.png"));
+    static Texture yellowPlayer = new Texture(Gdx.files.internal("yellowFour.png"));
+    Sprite playerTurn;
+
+
     int TEAMS = 2;
     int[] teamScores;
     int[] teamRemaining;
@@ -52,6 +58,7 @@ public class gameScreen implements Screen {
         buildings = new Array<Sprite>();
         menuScreen = isMainMenu;
         TEAMS = playerCount;
+        playerTurn = new Sprite(bluePlayer);
 
         map.generate();
         debugRenderer = new Box2DDebugRenderer();
@@ -93,7 +100,7 @@ public class gameScreen implements Screen {
     		if (count > 5) {
     			System.out.println("GOT HERE");
     			game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
-                dispose();
+                backgroundMusic.dispose();
     			break;
     		}
     		count++;
@@ -182,6 +189,23 @@ public class gameScreen implements Screen {
         if (menuScreen){
             game.batch.draw(pressSpaceSprite, pressSpaceSprite.getX(), pressSpaceSprite.getY(), pressSpaceSprite.getOriginX(), pressSpaceSprite.getOriginY(), pressSpaceSprite.getWidth(), pressSpaceSprite.getHeight(), pressSpaceSprite.getScaleX(), pressSpaceSprite.getScaleY(), pressSpaceSprite.getRotation());
             game.batch.draw(playerAmountSprite, playerAmountSprite.getX(), playerAmountSprite.getY(), playerAmountSprite.getOriginX(), playerAmountSprite.getOriginY(), playerAmountSprite.getWidth(), playerAmountSprite.getHeight(), playerAmountSprite.getScaleX(), playerAmountSprite.getScaleY(), playerAmountSprite.getRotation());
+        } else{
+            if (TEAMS > 1){
+                if (teamTurn == 1){
+                    playerTurn.setTexture(bluePlayer);
+                    playerTurn.setPosition(0f, 0f);
+                } else if (teamTurn == 2){
+                    playerTurn.setTexture(redPlayer);
+                    playerTurn.setPosition(0f, 0f);
+                } else if (teamTurn == 3) {
+                    playerTurn.setTexture(greenPlayer);
+                    playerTurn.setPosition(0f, 0f);
+                } else if (teamTurn == 4) {
+                    playerTurn.setTexture(yellowPlayer);
+                    playerTurn.setPosition(0f, 0f);
+                }
+                game.batch.draw(playerTurn, playerTurn.getX(), playerTurn.getY(), playerTurn.getOriginX(), playerTurn.getOriginY(), playerTurn.getWidth(), playerTurn.getHeight(), playerTurn.getScaleX(), playerTurn.getScaleY(), playerTurn.getRotation());
+            }
         }
         game.batch.end();
         //debugRenderer.render(map.world, debugMatrix);
