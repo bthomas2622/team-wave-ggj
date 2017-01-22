@@ -28,10 +28,14 @@ public class Mob implements Collideable {
     Body body;                // Mob body
 	float retargetTimer;
 
-    public Mob(gameScreen game, Body body, Node target) {
+    // Variable to store the mobs path
+    private MobPath path;
+
+    // Base constructor now takes in a mobpath
+    public Mob(gameScreen game, Body body,MobPath mobPath) {
         this.game = game;
         this.body = body;
-        this.target = target;
+        //this.target = target;
         MobDice = MathUtils.random();
         if (MobDice > .5f) {
             mobImage = new Texture(Gdx.files.internal("badPedestrian.png"));
@@ -40,11 +44,20 @@ public class Mob implements Collideable {
             mobImage = new Texture(Gdx.files.internal("neutralPedestrian.png"));
             mobSprite = new Sprite(mobImage);
         }
-		mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
-		System.out.println(mobSprite.getX());
-		mobSprite.setOriginCenter();
+        mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
+        System.out.println(mobSprite.getX());
+        mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
         body.setUserData(this);
+
+        // setting the mob's path to the passed in mobpath instance
+        path = mobPath;
+		setTarget(path.getCurrentNode());
+    }
+
+    // Alternate constructor creates a random path for the  mob
+    public Mob(gameScreen game, Body body) {
+        this(game, body, new MobPath(game, MobPath.getRandomPathType()));
     }
 
     // Method that gets called whenever the game is "updating"
@@ -62,9 +75,10 @@ public class Mob implements Collideable {
 		}
 
 		if (atTarget()) {
-			Node newTarget = target.getRandomNeighborNode();
+			//Node newTarget = target.getRandomNeighborNode();
+			setTarget(path.nextNode());
 			//System.out.println("Switching the target from (" + target.getYPos() +", " + target.getXPos() +") to (" + newTarget.getXPos() + ", " + newTarget.getYPos() + ").");
-			setTarget(newTarget);
+			//setTarget(newTarget);
 			retargetTimer = RETARGET_TIME;
 		}
 	}
@@ -93,12 +107,13 @@ public class Mob implements Collideable {
 		waved = true;
     }
 
-    public Node getTarget() {
-        return target;
-    }
+    //  Move method to tie atTarget() and moveTowardTarget() together
+    // Checks if the mob is at a target, switches if it is, then moves towards the target
+    public void move() {
+        if (atTarget())
+            setTarget(path.nextNode());
 
-    public void setTarget(Node newTarget) {
-        target = newTarget;
+        moveTowardTarget();
     }
 
 	// returns true when the mob is at the target node
@@ -168,6 +183,17 @@ public class Mob implements Collideable {
 	public float getYPixelPos() {
 		return body.getPosition().y * game.PIXELS_TO_METERS;
 	}
+
+    // Helper functions for dealing with mob targets
+    public Node getTarget() {
+        return target;
+    }
+
+    public void setTarget(Node newTarget) {
+        target = newTarget;
+    }
+
+    // Dispose Method
 	public void dispose(){
 		mobImage.dispose();
 	}

@@ -45,18 +45,35 @@ public class MobPath {
 
     // Returns a random path type  from the array of path types
     public static String getRandomPathType(){
-        return PATH_TYPES_ARRAY[MathUtils.random(0, PATH_TYPES_ARRAY.length)];
+        return PATH_TYPES_ARRAY[MathUtils.random(0, PATH_TYPES_ARRAY.length - 1)];
     }
 
     // gets the next node in the mobs current sequence
     public Node nextNode(){
-        if ((pathIndex >= nodePath.size()) || (pathIndex <= 0))
-            ascending = !ascending;
+        // Rectangle paths are a special case because they loop unlike other paths
+        if (currentPath == PATH_RECTANGLE)
+        {
+            // Note: ascending is always true for rectangle paths
+            if (pathIndex >= nodePath.size() - 1)
+                pathIndex = 0;
+        }
+        // All other paths should traverse up and down the path
+        else {
+            if (pathIndex >= nodePath.size() - 1) {
+                pathIndex = nodePath.size() - 1;
+                ascending = false;
+            } else if (pathIndex <= 0) {
+                pathIndex = 0;
+                ascending = true;
+            }
+        }
+
         if (ascending)
             pathIndex += 1;
         else
             pathIndex -= 1;
 
+        System.out.println("Path index: " + pathIndex);
         return nodePath.get(pathIndex);
     }
 
@@ -97,31 +114,59 @@ public class MobPath {
 
             //Then, we add the nodes from startingColumn, startingRow to endingColumn, Starting row
             for (int i = startingColumn; i <= endingColumn; i++)
-                path.add(map.nodes[startingRow][i]);
+                //path.add(map.nodes[startingRow][i]);
+                path.add(map.nodes[i][startingRow]);
 
             for (int i = startingRow; i <= endingRow; i++)
-                path.add(map.nodes[i][endingColumn]);
+                //path.add(map.nodes[i][endingColumn]);
+                path.add(map.nodes[endingColumn][i]);
 
             for (int i = endingColumn; i >= startingColumn; i--)
-                path.add(map.nodes[endingRow][i]);
+                //path.add(map.nodes[endingRow][i]);
+                path.add(map.nodes[i][endingRow]);
 
             for (int i = endingRow; i >= startingRow; i--)
-                path.add(map.nodes[i][startingColumn]);
+                //path.add(map.nodes[i][startingColumn]);
+                path.add(map.nodes[startingColumn][i]);
+
         }
         else if (pathType == PATH_DESTINATION) {
-            int psX = MathUtils.random(0, map.WIDTH);
-            int psY = MathUtils.random(0, map.HEIGHT);
-            int peX = MathUtils.random(0, map.WIDTH);
-            int peY = MathUtils.random(0, map.HEIGHT);
+            int psX = MathUtils.random(0, map.WIDTH - 1);
+            int psY = MathUtils.random(0, map.HEIGHT - 1);
+            int peX = MathUtils.random(0, map.WIDTH  - 1);
+            int peY = MathUtils.random(0, map.HEIGHT - 1);
 
             // Hacky code to ensure that the paths have some decent level of distance
             // note, this code does not allow for fully horizontal or vertical paths
             // (I wish I could say that it was by choice, but i'm too lazy / it actually improves
             // path distinction ;) )
-            while (psX == peX);
-                psX = MathUtils.random(0, Map.WIDTH);
-            while (psY == peY);
-                psX = MathUtils.random(0, Map.HEIGHT);
+
+            while (psX == peX) {
+                psX = MathUtils.random(0, Map.WIDTH - 1);}
+            while (psY == peY) {
+                psY = MathUtils.random(0, Map.HEIGHT - 1);
+            }
+            // Because the closest path to a destination is the diagonal, we take turns adding
+            // up / down and left / right movements  to the path until we are at the destination
+
+            while (psX != peX || psY != peY){
+                if (psX > peX){
+                    psX -= 1;
+                    path.add(map.nodes[psX][psY]);
+                }
+                else if (psX < peX) {
+                    psX += 1;
+                    path.add(map.nodes[psX][psY]);
+                }
+                if (psY > peY){
+                    psY -= 1;
+                    path.add(map.nodes[psX][psY]);
+                }
+                else if (psY < peY) {
+                    psY += 1;
+                    path.add(map.nodes[psX][psY]);
+                }
+            }
         }
         else if (pathType == PATH_CUSTOM) {
             // Does nothing if the path is custom
