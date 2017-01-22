@@ -5,20 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Array;
-
-import java.util.ArrayList;
-
-import box2dLight.RayHandler;
 
 /**
  * Created by bthom on 1/20/2017.
@@ -36,11 +29,13 @@ public class gameScreen implements Screen {
     boolean menuScreen;
     Texture pressSpace;
     Sprite pressSpaceSprite;
-    int score;
-    int remaining;
     
-    final static int TEAMS = 2;
+    final static int TEAMS = 4;
     int[] teamScores;
+    int[] teamRemaining;
+    int teamTurn;
+    boolean updateTeamTurn;
+    
     AssetManager assetManager;
     Music backgroundMusic;
     boolean loaded = false;
@@ -65,14 +60,35 @@ public class gameScreen implements Screen {
             pressSpaceSprite.setPosition(0f, 0f);
             camera.zoom = 1;
         }
-        score = 0;
-        remaining = 0;
         teamScores = new int[TEAMS];
-        
+        teamRemaining = new int[TEAMS];
+        teamTurn = 1;
 
         assetManager = new AssetManager();
         assetManager.load("backgroundMusic.mp3", Music.class);
         assetManager.finishLoading();
+    }
+    
+    public void useTeamTurn() {
+    	teamTurn++;
+    	
+    	if (teamTurn > TEAMS) {
+    		teamTurn = 1;
+    	}
+    	int count = 0;
+    	while (teamRemaining[teamTurn-1] <= 0) {
+    		teamTurn++;
+    		if (teamTurn > TEAMS) {
+        		teamTurn = 1;
+        	}
+    		if (count > 5) {
+    			System.out.println("GOT HERE");
+    			game.setScreen(new gameOverScreen(game, teamScores[0], map.MOB_NUMBERS));
+    			break;
+    		}
+    		count++;
+    	}
+    	updateTeamTurn = false; 
     }
     
     public void updateTeamScores() {
@@ -86,14 +102,15 @@ public class gameScreen implements Screen {
     	}
     }
     
-    public int countGreenRemaining() {
-    	int counter = 0;
+    public void countTeamRemaining() {
+    	for (int x = 0; x < TEAMS; x++) {
+    		teamRemaining[x] = 0;
+    	}
     	for (Mob mob : mobs) {
     		if (mob.controlled && !mob.waved) {
-    			counter++;
+    			teamRemaining[mob.team-1]++;
     		}
     	}
-    	return counter;
     }
 
     //@Override
@@ -106,6 +123,9 @@ public class gameScreen implements Screen {
     @Override
     public void render (float delta) {
         //make sure music is loaded
+    	if (updateTeamTurn) {
+    		useTeamTurn();
+    	}
         if (loaded == false){
             loaded = startMusic();
         }
@@ -119,7 +139,7 @@ public class gameScreen implements Screen {
                 camera.zoom = 1;
             }
         }
-    	remaining = countGreenRemaining();
+    	countTeamRemaining();
     	
     	if (camera.zoom > 1) {
     		camera.zoom -= 0.1;
@@ -154,7 +174,6 @@ public class gameScreen implements Screen {
         }
         game.batch.end();
         //debugRenderer.render(map.world, debugMatrix);
-        map.rayHandler.setCombinedMatrix(debugMatrix, 0, 0, camera.viewportWidth / PIXELS_TO_METERS, camera.viewportHeight / PIXELS_TO_METERS);
 
         if (menuScreen){
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -170,7 +189,7 @@ public class gameScreen implements Screen {
             dispose();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new gameOverScreen(game, score, map.MOB_NUMBERS));
+            game.setScreen(new gameOverScreen(game, teamScores[0], map.MOB_NUMBERS));
             dispose();
         }
 
@@ -218,17 +237,12 @@ public class gameScreen implements Screen {
         map.dispose();
         assetManager.dispose();
         backgroundMusic.dispose();
-        pressSpace.dispose();
-
-        for (Mob mob : mobs) {
-            mob.mobImage.dispose();
-            try{
-                mob.wave.dispose();
-            }
-            catch (Exception e){
-
-            }
+        try{
+            pressSpace.dispose();
         }
+        catch (Exception e){
+        }
+
     }
 
 

@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,13 +11,13 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-
 
 public class WaveObject implements Collideable {
 	Sprite dropSprite;
-	Texture wave_drop;
+	static Texture wave_drop_blue = new Texture(Gdx.files.internal("waveProjectileBlue.png"));
+	static Texture wave_drop_red = new Texture(Gdx.files.internal("waveProjectileRed.png"));
+	static Texture wave_drop_green = new Texture(Gdx.files.internal("waveProjectileGreen.png"));
+	static Texture wave_drop_yellow = new Texture(Gdx.files.internal("waveProjectileYellow.png"));
 	gameScreen gameScreen;
 	Array<Body> bodies = new Array<Body>(20);
 	Array<Body> toDelete = new Array<Body>();
@@ -25,11 +28,18 @@ public class WaveObject implements Collideable {
 	public WaveObject(gameScreen gs, int team) {
 		gameScreen = gs;
 		this.team = team;
+		dropSprite = new Sprite(wave_drop_blue);
 		if (team == 1) {
-			wave_drop = new Texture(Gdx.files.internal("waveProjectileBlue.png"));
+			dropSprite.setTexture(wave_drop_blue);
+		}
+		else if (team == 2) {
+			dropSprite.setTexture(wave_drop_red);
+		}
+		else if (team == 3){
+			dropSprite.setTexture(wave_drop_green);
 		}
 		else {
-			wave_drop = new Texture(Gdx.files.internal("waveProjectileRed.png"));
+			dropSprite.setTexture(wave_drop_yellow);
 		}
 	}
 
@@ -54,7 +64,6 @@ public class WaveObject implements Collideable {
 	 * The drops will be placed at even distance on this circle
 	 */
 	protected void positionDrops(float centerX, float centerY) {
-		dropSprite = new Sprite(wave_drop);
 		for (int i = 0; i < 360; i = i + 9) {
 			int r = 32;
 			double x, y;
@@ -86,6 +95,6 @@ public class WaveObject implements Collideable {
 	}
 
 	public void dispose() {
-		wave_drop.dispose();
+//		wave_drop.dispose();
 	}
 }

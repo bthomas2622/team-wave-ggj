@@ -17,7 +17,15 @@ public class Mob implements Collideable {
 
 	private static final float MOVE_SPEED = 2; //2
 	private static final float RETARGET_TIME = 0.1f; //.5
-	public Texture mobImage;
+	public static Texture mobImage = new Texture(Gdx.files.internal("pencilNeutralPedestrian.png"));
+	public static Texture mobImageReadyBlue = new Texture(Gdx.files.internal("pencilReadyPedestrianBlue.png"));
+	public static Texture mobImageReadyRed = new Texture(Gdx.files.internal("pencilReadyPedestrianRed.png"));
+	public static Texture mobImageReadyGreen = new Texture(Gdx.files.internal("pencilReadyPedestrianGreen.png"));
+	public static Texture mobImageReadyYellow = new Texture(Gdx.files.internal("pencilReadyPedestrianYellow.png"));
+	public static Texture mobImageSpentBlue = new Texture(Gdx.files.internal("pencilSpentPedestrianBlue.png"));
+	public static Texture mobImageSpentRed = new Texture(Gdx.files.internal("pencilSpentPedestrianRed.png"));
+	public static Texture mobImageSpentGreen = new Texture(Gdx.files.internal("pencilSpentPedestrianGreen.png"));
+	public static Texture mobImageSpentYellow = new Texture(Gdx.files.internal("pencilSpentPedestrianYellow.png"));
 	gameScreen game;
 	WaveObject wave;
     Sprite mobSprite;
@@ -53,11 +61,9 @@ public class Mob implements Collideable {
         this.startingPlayer = isStartingPlayer;
         //this.target = target;
         MobDice = MathUtils.random();
-        mobImage = new Texture(Gdx.files.internal("pencilNeutralPedestrian.png"));
         mobSprite = new Sprite(mobImage);
 
         mobSprite.setPosition(body.getPosition().x * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f), body.getPosition().y * game.PIXELS_TO_METERS - (BODY_WIDTH / 2f));
-        System.out.println(mobSprite.getX());
         mobSprite.setOriginCenter();
         mobSprite.setRotation(0f);
         body.setUserData(this);
@@ -84,10 +90,11 @@ public class Mob implements Collideable {
 		}
 
         if (!game.menuScreen) {
-            if ((Gdx.input.isKeyJustPressed(Keys.SPACE) && team == 1) || (Gdx.input.isKeyJustPressed(Keys.ENTER) && team == 2)) {
+            if ((Gdx.input.isKeyJustPressed(Keys.SPACE) && team == game.teamTurn)) {
                 if (controlled && !waved) {
                     wave();
                 }
+                game.updateTeamTurn = true;
             }
         }
 
@@ -113,18 +120,34 @@ public class Mob implements Collideable {
 	}
 
 	public void render(Batch batch) {
-		String colour = "Blue";
-		if (team == 2) {
-			colour = "Red";
-		}
+		System.out.println(team);
 		if (waved) {
-            mobImage = new Texture(Gdx.files.internal("pencilSpentPedestrian"+ colour +".png"));
-            mobSprite = new Sprite(mobImage);
+			if (team == 1) {
+				mobSprite.setTexture(mobImageSpentBlue);
+			}
+			if (team == 2) {
+				mobSprite.setTexture(mobImageSpentRed);
+			}
+			else if (team == 3) {
+				mobSprite.setTexture(mobImageSpentGreen);
+			}
+			else {
+				mobSprite.setTexture(mobImageSpentYellow);
+			}
         } else if (controlled) {
-            mobImage = new Texture(Gdx.files.internal("pencilReadyPedestrian" + colour + ".png"));
-            mobSprite = new Sprite(mobImage);
+        	if (team == 1) {
+				mobSprite.setTexture(mobImageReadyBlue);
+			}
+			if (team == 2) {
+				mobSprite.setTexture(mobImageReadyRed);
+			}
+			else if (team == 3) {
+				mobSprite.setTexture(mobImageReadyGreen);
+			}
+			else {
+				mobSprite.setTexture(mobImageReadyYellow);
+			}
         } else {
-        	mobImage = new Texture(Gdx.files.internal("pencilNeutralPedestrian.png"));
             mobSprite = new Sprite(mobImage);
         }
 		
@@ -250,7 +273,6 @@ public class Mob implements Collideable {
 	public void onCollide(Collideable object) {
 		if (object instanceof WaveObject) {
 			if (controlled == false || (((WaveObject)object).team != team && waved)) {
-				game.score++;
 				controlled = true;
 				team = ((WaveObject)object).team;
 				game.updateTeamScores();
