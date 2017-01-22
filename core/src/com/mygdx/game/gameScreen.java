@@ -139,7 +139,7 @@ public class gameScreen implements Screen {
             dispose();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new gameOverScreen(game, score, remaining));
+            game.setScreen(new gameOverScreen(game, score, map.MOB_NUMBERS - score));
             dispose();
         }
 
