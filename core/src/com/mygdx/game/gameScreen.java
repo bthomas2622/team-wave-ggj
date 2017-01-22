@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -82,6 +83,11 @@ public class gameScreen implements Screen {
       map.rayHandler.setCombinedMatrix(debugMatrix, 0, 0, camera.viewportWidth / PIXELS_TO_METERS, camera.viewportHeight / PIXELS_TO_METERS);
         ((RayHandler) map.rayHandler).updateAndRender();
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            game.setScreen(new gameScreen(game));
+            dispose();
+        }
+
 
     }
 
@@ -110,6 +116,7 @@ public class gameScreen implements Screen {
     @Override
     public void dispose() {
         debugRenderer.dispose();
+        map.dispose();
     }
 
 
