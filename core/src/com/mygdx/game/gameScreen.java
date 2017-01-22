@@ -226,7 +226,7 @@ public class gameScreen implements Screen {
                 mob.wave.dispose();
             }
             catch (Exception e){
-                
+
             }
         }
     }
