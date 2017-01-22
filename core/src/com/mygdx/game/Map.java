@@ -73,7 +73,7 @@ public class Map {
 	}
 	
 	public void render(Batch batch) {
-        batch.draw(backgroundImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(backgroundImage, 0, 0, 1920, 1080);
 	}
 
 	public void generate() {
