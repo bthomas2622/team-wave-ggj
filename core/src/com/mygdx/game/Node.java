@@ -1,8 +1,8 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.math.MathUtils;
-
 import java.util.ArrayList;
+
+import com.badlogic.gdx.math.MathUtils;
 
 public class Node
 {

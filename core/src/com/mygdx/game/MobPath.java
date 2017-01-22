@@ -1,9 +1,8 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.math.MathUtils;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import com.badlogic.gdx.math.MathUtils;
 
 /**
  * Created by zacha on 1/21/2017.
