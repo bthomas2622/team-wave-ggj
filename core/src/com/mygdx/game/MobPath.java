@@ -17,9 +17,12 @@ public class MobPath {
     public static final String PATH_CUSTOM = "CUSTOM";
     public static final String PATH_RECTANGLE = "RECTANGLE";
     public static final String PATH_DESTINATION = "DESTINATION";
+    // This defers from destionation by allowing the user to specify a start position
+    public static final String PATH_DESTINATION_FROM_START = "DESTINATION_FROM_START";
 
     // Note this array doesn't include custom because it is designed for random generation
     public static final String[] PATH_TYPES_ARRAY = {PATH_VERTICAL, PATH_HORIZONTAL, PATH_RECTANGLE, PATH_DESTINATION};
+    // this doesn'tt include PATH_DESTINATION_WITH_START because that isn't designed for random
 
     // The path style that the mob is currently on
     private String currentPath = null;
@@ -175,6 +178,101 @@ public class MobPath {
         return path;
     }
 
+
+    public void changeNodePath(Map map, int xStart, int yStart) {
+        currentPath = getRandomPathType();
+        nodePath = createNodePath(map, currentPath, xStart, yStart);
+    }
+
+    // This is a super hacky, alternate behavior createNodePath that is designed for creating a
+    // new path that starts at the current location
+    // This makes it easy for mobs to switch paths
+    public static ArrayList<Node> createNodePath(Map map, String pathType, int xStart, int yStart) {
+        ArrayList<Node> path = new ArrayList<Node>();
+        if (pathType == PATH_VERTICAL) {
+            // Generating a random column to run up and down along the map
+            // We could potentially add some way to create a path along a specific vertical later
+            int column = xStart;
+            for (int i = 0; i < map.HEIGHT; i++)
+                path.add(map.nodes[column][i]);
+        }
+        else if (pathType == PATH_HORIZONTAL) {
+            // Generating a random row to run up across
+            int row = yStart;
+            for (int i = 0; i < map.WIDTH; i++)
+                path.add(map.nodes[i][row]);
+        }
+        else if (pathType == PATH_RECTANGLE) {
+            // first, we generate a starting column from 0 -> WIDTH - 2
+            int startingColumn = xStart;
+            // then, we generate an ending column from  start to WIDTH - 1
+            int endingColumn = MathUtils.random(startingColumn +1, map.WIDTH - 1);
+            // next, we do the same thing for rows
+            int startingRow = yStart;
+            int endingRow = MathUtils.random(startingRow +1, map.HEIGHT - 1);
+
+            //Then, we add the nodes from startingColumn, startingRow to endingColumn, Starting row
+            for (int i = startingColumn; i <= endingColumn; i++)
+                //path.add(map.nodes[startingRow][i]);
+                path.add(map.nodes[i][startingRow]);
+
+            for (int i = startingRow; i <= endingRow; i++)
+                //path.add(map.nodes[i][endingColumn]);
+                path.add(map.nodes[endingColumn][i]);
+
+            for (int i = endingColumn; i >= startingColumn; i--)
+                //path.add(map.nodes[endingRow][i]);
+                path.add(map.nodes[i][endingRow]);
+
+            for (int i = endingRow; i >= startingRow; i--)
+                //path.add(map.nodes[i][startingColumn]);
+                path.add(map.nodes[startingColumn][i]);
+
+        }
+        else if (pathType == PATH_DESTINATION) {
+            int psX = xStart;
+            int psY = yStart;
+            int peX = MathUtils.random(0, map.WIDTH  - 1);
+            int peY = MathUtils.random(0, map.HEIGHT - 1);
+
+            // Hacky code to ensure that the paths have some decent level of distance
+            // note, this code does not allow for fully horizontal or vertical paths
+            // (I wish I could say that it was by choice, but i'm too lazy / it actually improves
+            // path distinction ;) )
+
+            while (psX == peX) {
+                psX = MathUtils.random(0, Map.WIDTH - 1);}
+            while (psY == peY) {
+                psY = MathUtils.random(0, Map.HEIGHT - 1);
+            }
+            // Because the closest path to a destination is the diagonal, we take turns adding
+            // up / down and left / right movements  to the path until we are at the destination
+
+            while (psX != peX || psY != peY){
+                if (psX > peX){
+                    psX -= 1;
+                    path.add(map.nodes[psX][psY]);
+                }
+                else if (psX < peX) {
+                    psX += 1;
+                    path.add(map.nodes[psX][psY]);
+                }
+                if (psY > peY){
+                    psY -= 1;
+                    path.add(map.nodes[psX][psY]);
+                }
+                else if (psY < peY) {
+                    psY += 1;
+                    path.add(map.nodes[psX][psY]);
+                }
+            }
+        }
+        else if (pathType == PATH_CUSTOM) {
+            // Does nothing if the path is custom
+            // (because a randomly generated custom path is essentially just a destination path)
+        }
+        return path;
+    }
     public String getCurrentPathType() {
         return currentPath;
     }

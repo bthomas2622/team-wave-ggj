@@ -106,9 +106,9 @@ public class gameScreen implements Screen {
     @Override
     public void render (float delta) {
         //make sure music is loaded
-        if (loaded == false){
-            loaded = startMusic();
-        }
+//        if (loaded == false){
+//            loaded = startMusic();
+//        }
         if (!menuScreen){
             if (camera.zoom > 1) {
                 camera.zoom -= 0.08;
@@ -220,5 +220,5 @@ public class gameScreen implements Screen {
         backgroundMusic.dispose();
     }
 
-    
+
 }
