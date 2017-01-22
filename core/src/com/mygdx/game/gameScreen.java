@@ -222,6 +222,12 @@ public class gameScreen implements Screen {
 
         for (Mob mob : mobs) {
             mob.mobImage.dispose();
+            try{
+                mob.wave.dispose();
+            }
+            catch (Exception e){
+                
+            }
         }
     }
 

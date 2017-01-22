@@ -84,4 +84,8 @@ public class WaveObject implements Collideable {
 	public Body getBody() {
 		return bodies.first();
 	}
+
+	public void dispose() {
+		wave_drop.dispose();
+	}
 }
