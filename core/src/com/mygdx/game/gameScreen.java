@@ -14,6 +14,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.ArrayList;
+
 import box2dLight.RayHandler;
 
 /**
@@ -139,6 +141,7 @@ public class gameScreen implements Screen {
             dispose();
         }
 
+
     }
 
     @Override
@@ -171,15 +174,4 @@ public class gameScreen implements Screen {
 
 
 
-    // Experimental Code
-    public static void renderColorTrails(){
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-
-        shapeRenderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-    }
 }
