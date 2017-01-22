@@ -2,9 +2,11 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -48,7 +50,7 @@ public class gameScreen implements Screen {
     public void render (float delta) {
     	map.world.step(delta, 6, 2);
         camera.update();
-    	
+
     	map.tick();
     	for (Mob mob:mobs) {
             mob.tick(delta);
@@ -70,6 +72,8 @@ public class gameScreen implements Screen {
         debugRenderer.render(map.world, debugMatrix);
         map.rayHandler.setCombinedMatrix(debugMatrix, 0, 0, camera.viewportWidth / PIXELS_TO_METERS, camera.viewportHeight / PIXELS_TO_METERS);
         ((RayHandler) map.rayHandler).updateAndRender();
+
+
     }
 
     @Override
@@ -99,4 +103,17 @@ public class gameScreen implements Screen {
         debugRenderer.dispose();
     }
 
+
+
+    // Experimental Code
+    public static void renderColorTrails(){
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
 }
