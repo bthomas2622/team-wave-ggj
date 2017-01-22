@@ -133,7 +133,6 @@ public class gameScreen implements Screen {
     			teamRemaining[mob.team-1]++;
     		}
     	}
-    	updateTeamTurn = false;
     	for (int x = 0; x < TEAMS; x++) {
     		if (x == teamTurn && teamRemaining[x] <= 0) {
     			updateTeamTurn = true;
@@ -250,15 +249,15 @@ public class gameScreen implements Screen {
             dispose();
         }
         
-        if (shouldGameOver) {
-        	timer += delta;
-        	if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && timer >= 5) {
-        		game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
-                dispose();
-            	shouldGameOver = false;
-            	timer = 0;
-        	}
-        }
+//        if (shouldGameOver) {
+//        	timer += delta;
+//        	if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && timer >= 5) {
+//        		game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
+//                dispose();
+//            	shouldGameOver = false;
+//            	timer = 0;
+//        	}
+//        }
     	countTeamRemaining();
 
         if (updateTeamTurn) {
