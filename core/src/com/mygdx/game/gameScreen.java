@@ -49,13 +49,12 @@ public class gameScreen implements Screen {
 
         if (!menuScreen){
             camera.zoom = 5;
-        }
-        if (menuScreen){
+        } else {
             pressSpace = new Texture(Gdx.files.internal("pressSpace.png"));;
             pressSpaceSprite = new Sprite(pressSpace);
             pressSpaceSprite.setPosition(0f, 0f);
+            camera.zoom = 1;
         }
-        camera.zoom = 5;
         score = 0;
         remaining = 0;
     }
