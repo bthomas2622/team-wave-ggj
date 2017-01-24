@@ -104,7 +104,8 @@ public class gameScreen implements Screen {
     		if (teamTurn > TEAMS) {
         		teamTurn = 1;
         	}
-    		if (count > 5) {
+    		
+    		if (count > TEAMS) {
     			shouldGameOver = true;
     			break;
     		}
@@ -125,18 +126,24 @@ public class gameScreen implements Screen {
     }
     
     public void countTeamRemaining() {
+    	boolean oneAlive = false;
     	for (int x = 0; x < TEAMS; x++) {
     		teamRemaining[x] = 0;
     	}
     	for (Mob mob : mobs) {
     		if (mob.controlled && !mob.waved) {
     			teamRemaining[mob.team-1]++;
+    			oneAlive = true;
     		}
     	}
-    	for (int x = 0; x < TEAMS; x++) {
-    		if (x == teamTurn && teamRemaining[x] <= 0) {
-    			updateTeamTurn = true;
-    		}
+    	if (teamRemaining[teamTurn-1] <= 0) {
+			updateTeamTurn = true;
+    	}
+    	
+    	if (!oneAlive) {
+    		shouldGameOver = true;
+    	} else {
+    		shouldGameOver = false;
     	}
     }
 
@@ -210,7 +217,9 @@ public class gameScreen implements Screen {
                     playerTurn.setTexture(yellowPlayer);
                     playerTurn.setPosition(0f, 0f);
                 }
-                game.batch.draw(playerTurn, playerTurn.getX(), playerTurn.getY(), playerTurn.getOriginX(), playerTurn.getOriginY(), playerTurn.getWidth(), playerTurn.getHeight(), playerTurn.getScaleX(), playerTurn.getScaleY(), playerTurn.getRotation());
+                if (!shouldGameOver) {
+                    game.batch.draw(playerTurn, playerTurn.getX(), playerTurn.getY(), playerTurn.getOriginX(), playerTurn.getOriginY(), playerTurn.getWidth(), playerTurn.getHeight(), playerTurn.getScaleX(), playerTurn.getScaleY(), playerTurn.getRotation());
+                }
             }
         }
         game.batch.end();
@@ -249,22 +258,23 @@ public class gameScreen implements Screen {
             dispose();
         }
         
-//        if (shouldGameOver) {
-//        	timer += delta;
-//        	if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && timer >= 5) {
-//        		game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
-//                dispose();
-//            	shouldGameOver = false;
-//            	timer = 0;
-//        	}
-//        }
     	countTeamRemaining();
 
-        if (updateTeamTurn) {
-            useTeamTurn();
+        if (shouldGameOver) {
+        	timer += delta;
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && timer >= 1f) {
+        		game.setScreen(new gameOverScreen(game, teamScores, map.MOB_NUMBERS, TEAMS));
+                dispose();
+            	shouldGameOver = false;
+            	timer = 0;
+        	}
         }
-
-
+        else {
+        	timer = 0;
+            if (updateTeamTurn) {
+                useTeamTurn();
+            }
+        }
     }
 
     public boolean startMusic() {
