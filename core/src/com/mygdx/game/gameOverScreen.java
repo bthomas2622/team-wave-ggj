@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 
 /**
@@ -24,7 +25,12 @@ public class gameOverScreen implements Screen {
     static Texture backgroundImageGreen = new Texture(Gdx.files.internal("gameoverimages/gameOverGreen.png"));
     static Texture backgroundImageOrange = new Texture(Gdx.files.internal("gameoverimages/gameOverOrange.png"));
     static Texture backgroundImagePink = new Texture(Gdx.files.internal("gameoverimages/gameOverPink.png"));
+    static Sprite backgroundBlue = new Sprite(backgroundImageBlue);
+    static Sprite backgroundGreen = new Sprite(backgroundImageGreen);
+    static Sprite backgroundOrange = new Sprite(backgroundImageOrange);
+    static Sprite backgroundPink = new Sprite(backgroundImagePink);
     Texture backgroundImage;
+    Sprite background;
     float backgroundRoller;
     BitmapFont fontOne;
     int[] score;
@@ -34,6 +40,7 @@ public class gameOverScreen implements Screen {
     Sound menuChange;
     boolean loaded = false;
     boolean played = false;
+    String playAgain = "Press SPACE to wave once more, 1-4 to change player count";
 
     public gameOverScreen(final TeamWave gam, int[] score, int remaining, int playerCount) {
         game = gam;
@@ -42,13 +49,13 @@ public class gameOverScreen implements Screen {
         camera.setToOrtho(false, 1920, 1080);
         backgroundRoller = MathUtils.random();
         if (backgroundRoller <= 0.25f) {
-            backgroundImage = backgroundImageBlue;
+            background = backgroundBlue;
         } else if (backgroundRoller > 0.25f & backgroundRoller <= 0.5f){
-            backgroundImage = backgroundImageGreen;
+            background = backgroundGreen;
         } else if (backgroundRoller > 0.5f & backgroundRoller <= 0.75f){
-            backgroundImage = backgroundImageOrange;
+            background = backgroundOrange;
         } else {
-            backgroundImage = backgroundImagePink;
+            background = backgroundPink;
         }
         this.score = score;
         this.remaining = remaining;
@@ -74,7 +81,7 @@ public class gameOverScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(backgroundImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
        
         if (score.length > 0) {
         	fontOne.setColor(0, 0, 1, 1);
@@ -93,13 +100,28 @@ public class gameOverScreen implements Screen {
             fontOne.draw(game.batch, "YELLOW SCORE: " + this.score[3], Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/1.50f - 60);
         }
         fontOne.setColor(1, 1, 1, 1);
-        fontOne.draw(game.batch, "Press SPACE to wave once more", Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/3.0f);
+        fontOne.draw(game.batch, playAgain, Gdx.graphics.getWidth()/5, Gdx.graphics.getHeight()/3.0f);
         game.batch.end();
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.setScreen(new gameScreen(game, false, TEAMS));
             dispose();
         }
-
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+            game.setScreen(new gameScreen(game, false, 1));
+            dispose();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            game.setScreen(new gameScreen(game, false, 2));
+            dispose();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+            game.setScreen(new gameScreen(game, false, 3));
+            dispose();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+            game.setScreen(new gameScreen(game, false, 4));
+            dispose();
+        }
     }
 
     public boolean startMusic() {
@@ -114,7 +136,13 @@ public class gameOverScreen implements Screen {
 
     @Override
     public void resize(int width, int height){
-
+        background.setSize(width, height);
+        if (height < 1000){
+            playAgain = "Press SPACE to wave once more \n 1-4 to change player count";
+        }
+        camera.setToOrtho(false, width, height);
+        //you can move it to whatever position you want here
+        camera.update();
     }
 
     @Override
